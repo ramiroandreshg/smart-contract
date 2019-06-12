@@ -32,13 +32,18 @@ contract Subasteya {
   constructor(bytes32 itemUrl, bytes32 itemName, bytes32 itemDescription,
     uint256 priceBase, uint256 priceMin, uint256 priceMax, uint256 maxAmount) public {
     owner = msg.sender;
+
     url = itemUrl;
     name = itemName;
     description = itemDescription;
+
     basePrice = priceBase;
     minPrice = priceMin;
     maxPrice = priceMax;
     maxAmountOfBids = maxAmount;
+
+    currentBestBid = Bid(address(0), 0);
+
     auctionInProgress = false;
   }
 
@@ -69,7 +74,6 @@ contract Subasteya {
   /* Methods */
   function openAuction () public onlyOwner() {
     auctionInProgress = true;
-    currentBestBid = Bid(address(0), 0);
   }
 
   function bid () public payable isAuctionOpen() returns(bool) {
