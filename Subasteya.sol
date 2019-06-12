@@ -77,8 +77,7 @@ contract Subasteya {
   }
 
   function bid () public payable isAuctionOpen() returns(bool) {
-    /* Try to place a bid or refund the money sent.
-    Log bid attempt
+    /* Try to place a bid (loggin the amount and address) or refund the money sent.
     Return true if bid was succesfully placed or false otherwise */
     return false;
   }
@@ -87,13 +86,21 @@ contract Subasteya {
     auctionInProgress = false;
     return true;
   }
-  // closeAuctionByOwner onlyowner (si se cumplen los parametros de bids)
-  // closeAuctionAutomatically private
+
+  function isMaxAmountOfBidsReached () private view returns(bool) {
+    return bids.length >= maxAmountOfBids;
+  }
+
+  function doesLastBidCoverMaxPrice () private view returns(bool) {
+    return currentBestBid.amount >= maxPrice;
+  }
+
+   function auctionGetsAutomaticallyClosed () private view returns(bool) {
+    return isMaxAmountOfBidsReached() || doesLastBidCoverMaxPrice();
+  }
 
   /* Getters */
   function getCurrentMaxBid () public view returns(uint256) {
     return currentBestBid.amount;
   }
-
-  /* Aux fn */
 }
