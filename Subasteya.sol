@@ -58,12 +58,18 @@ contract Subasteya {
     _;
   }
 
+  modifier minPriceCovered () {
+    require(currentBestBid.amount >= minPrice, "minPriceCovered - current best bid isn't greater than min price");
+    _;
+  }
+
   /* Payable function */
   function() external payable{}
 
   /* Methods */
   function openAuction () public onlyOwner() {
     auctionInProgress = true;
+    currentBestBid = Bid(address(0), 0);
   }
 
   function bid () public payable isAuctionOpen() returns(bool) {
@@ -72,10 +78,18 @@ contract Subasteya {
     Return true if bid was succesfully placed or false otherwise */
     return false;
   }
+
+  function ownerCloseAuction () public onlyOwner() minPriceCovered() returns(bool) {
+    auctionInProgress = false;
+    return true;
+  }
   // closeAuctionByOwner onlyowner (si se cumplen los parametros de bids)
   // closeAuctionAutomatically private
 
   /* Getters */
+  function getCurrentMaxBid () public view returns(uint256) {
+    return currentBestBid.amount;
+  }
 
   /* Aux fn */
 }
