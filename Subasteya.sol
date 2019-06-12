@@ -25,7 +25,7 @@ contract Subasteya {
     }
 
     /* Events */
-    // what are these for? - I think its for writing to the blockchain purpose
+    // emit events when you want to write some data into the blockchain
 
     /* Constructor */
     constructor(bytes32 itemUrl, bytes32 itemName, bytes32 itemDescription,
