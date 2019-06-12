@@ -49,7 +49,7 @@ contract Subasteya {
 
   /* Modifiers */
   modifier onlyOwner () {
-    require(msg.sender == owner, "onlyOwner - caller is NOT the owner.");
+    require(msg.sender == owner, "onlyOwner - caller is not the owner.");
     _;
   }
 
@@ -68,6 +68,11 @@ contract Subasteya {
     _;
   }
 
+  modifier isDifferentBidder () {
+    require(msg.sender != currentBestBid.bidder, "isDifferentBidder - next bid cant be made by current best bid holder");
+    _;
+  }
+
   /* Payable function */
   function() external payable{}
 
@@ -76,7 +81,7 @@ contract Subasteya {
     auctionInProgress = true;
   }
 
-  function bid () public payable isAuctionOpen() returns(bool) {
+  function bid () public payable isAuctionOpen() isDifferentBidder() returns(bool) {
     /* Try to place a bid (loggin the amount and address) or refund the money sent.
     Return true if bid was succesfully placed or false otherwise */
     return false;
