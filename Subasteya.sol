@@ -63,8 +63,8 @@ contract Subasteya {
     _;
   }
 
-  modifier minPriceCovered () {
-    require(currentBestBid.amount >= minPrice, "minPriceCovered - current best bid isn't greater than min price");
+  modifier isMinPriceCovered () {
+    require(currentBestBid.amount >= minPrice, "isMinPriceCovered - current best bid isn't greater than min price");
     _;
   }
 
@@ -82,7 +82,7 @@ contract Subasteya {
     return false;
   }
 
-  function ownerCloseAuction () public onlyOwner() minPriceCovered() returns(bool) {
+  function ownerCloseAuction () public onlyOwner() isMinPriceCovered() returns(bool) {
     auctionInProgress = false;
     return true;
   }
