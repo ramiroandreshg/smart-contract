@@ -14,7 +14,8 @@ contract Subasteya {
     uint256 private maxPrice;
     uint256 private maxAmountOfBids;
 
-    Bid[] private currentBids;
+    Bid[] private bids;
+    Bid private currentBestBid;
 
     bool auctionInProgress;
 
@@ -47,9 +48,34 @@ contract Subasteya {
         _;
     }
 
+    modifier isAuctionOpen () {
+        require(auctionInProgress == true, "isAuctionOpen - called when auction closed");
+        _;
+    }
+
+    modifier isBetterThanMaxBid () {
+        require(msg.value > currentBestBid.amount, "isBetterThanMaxBid - bid placed was not better than current best bid");
+        _;
+    }
+
     /* Payable function */
     function() external payable{}
 
+    /* Methods */
+    function openAuction () public onlyOwner() {
+        auctionInProgress = true;
+    }
 
+    function bid () public payable isAuctionOpen() returns(bool) {
+        /* Try to place a bid or refund the money sent.
+        Log bid attempt
+        Return true if bid was succesfully placed or false otherwise */
+        return false;
+    }
+    // closeAuctionByOwner onlyowner (si se cumplen los parametros de bids)
+    // closeAuctionAutomatically private
 
+    /* Getters */
+
+    /* Aux fn */
 }
