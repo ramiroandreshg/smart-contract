@@ -1,8 +1,29 @@
-//auto expand textarea
-function adjust_textarea(h) {
-  h.style.height = "20px";
-  h.style.height = (h.scrollHeight)+"px";
-}
+var js = window.js || {};
+
+js.auction = (function () {
+  const auctionIds = [
+    'auction-url',
+    'auction-name',
+    'auction-desc',
+    'auction-base-price',
+    'auction-base-price',
+    'auction-min-price',
+    'auction-max-price',
+    'auction-max-offer',
+    'auction-min-price'
+  ];
+
+  const priceIds = [];
+
+  var expose = {
+    adjustTextarea: (txtArea) => {
+      txtArea.style.height = "20px";
+      htxtArea.style.height = (txtArea.scrollHeight)+"px";
+    }
+  }
+
+  return expose;
+})();
 
 function executeForm() {
   if (!_validateInputs()) {
