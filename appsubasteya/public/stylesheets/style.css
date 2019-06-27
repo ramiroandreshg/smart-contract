@@ -74,6 +74,7 @@ a {
 	text-decoration: none;
 	text-transform: uppercase;
 }
+
 .auction input[type="button"]:hover, 
 .auction input[type="submit"]:hover {
 	background:linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
@@ -96,4 +97,18 @@ a {
 	float: right;
 	width: 50%;
 	text-align: right;
+}
+
+
+.auction input[type="button"].end-auction, 
+.auction input[type="submit"].end-auction {
+	box-shadow: inset 0px 1px 0px 0px #e23b3b;
+	background-color: #e23b3b;
+	border-color: #e23b3b;
+}
+
+.auction input[type="button"].end-auction:hover, 
+.auction input[type="submit"].end-auction:hover {
+	background:linear-gradient(to bottom, #e23b3b 5%, #e23b3b 100%);
+	background-color:#e23b3b;
 }
