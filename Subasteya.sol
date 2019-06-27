@@ -87,6 +87,10 @@ contract Subasteya {
     return false;
   }
 
+  function returnMoney (address bidder) internal {
+    // called when the bidder gets outbidded
+  }
+
   function ownerCloseAuction () public onlyOwner() isMinPriceCovered() returns(bool) {
     auctionInProgress = false;
     return true;
