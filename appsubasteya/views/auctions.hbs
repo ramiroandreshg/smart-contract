@@ -15,7 +15,7 @@
     <label for="auction-hide-info" id="hide-info">
       <input type="radio" id="auction-hide-info" name="public-info" value="hide"> Hide pricing information
     </label>
-    <input type="button" value="Start Auction" data-action="start" onclick="executeForm()"/>
+    <input type="button" id="auction-button" value="Start Auction" data-action="start" onclick="executeForm()"/>
   </form>
 </div>
 
@@ -31,6 +31,19 @@ function executeForm() {
     return;
   }
 
+  let auctionAction = document.getElementById('auction-button').dataset.action;
+
+  if (auctionAction === 'start') {
+    _deployContract();
+  }
+
+  if (auctionAction === 'end') {
+    _cancelContract();
+  }
+
+}
+
+function _deployContract () {
   var auctionData = _buildAuction();  
   var opts = {
     method: 'POST',
@@ -43,12 +56,19 @@ function executeForm() {
   fetch('/auctions/start', opts).then(function (res) {
     return res.json();
   }).then(function (jsonRes){
-    console.log('jRes', jsonRes)
+    if(jsonRes.deployed) {
+      disableAndHideFields();
+    } else {
+      console.log('err', jsonRes.error);
+      alert(jsonRes.error);
+      _cleanUpForm();
+    }
   })
   .catch(err => {
     console.log('err', err);
+    alert('Unknown deploy error');
+    _cleanUpForm();
   });
-
 }
 
 function _validateInputs() {
@@ -69,5 +89,11 @@ function _buildAuction () {
   
   return JSON.stringify(auction);
 }
+
+function _cleanUpForm () {
+  document.getElementById("auction-form").reset(); 
+}
 </script>
+
+
 

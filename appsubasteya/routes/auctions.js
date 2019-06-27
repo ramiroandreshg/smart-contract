@@ -8,10 +8,20 @@ app.get('/', function(req, res) {
 });
 
 app.post('/start', function (req, res) {
-  console.log('starting auction', req.body);
-  res.json({ok: 'ok!'});
-
+  let args = req.body;
+  
   // web3 logic here
+  
+  res.json({
+    deployed: true
+  });
+
+  /* Error Example
+  res.json({
+    deployed: false,
+    error: "not enough ether"
+  });
+  */
 });
 
 app.post('/end', function (req, res) {
