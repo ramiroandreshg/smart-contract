@@ -12,6 +12,7 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "express": "^4.16.3",
+    "body-parser": "1.19.0",
     "solc": "^0.5.1",
     "web3": "1.0.0-beta.37"
   }

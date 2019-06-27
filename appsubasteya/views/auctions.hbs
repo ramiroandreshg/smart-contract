@@ -1,7 +1,7 @@
 <h1>{{title}}</h1>
 <div class="auction">
   <h2>Auction Information</h2>
-  <form>
+  <form id="auction-form">
     <input type="text" id="auction-url" placeholder="URL">
     <input type="text" id="auction-name" placeholder="Name">
     <textarea type="text" id="auction-desc" placeholder="Description" onkeyup="adjust_textarea(this)"></textarea>
@@ -31,20 +31,43 @@ function executeForm() {
     return;
   }
 
+  var auctionData = _buildAuction();  
   var opts = {
     method: 'POST',
-    header: {}
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: auctionData
   };
 
   fetch('/auctions/start', opts).then(function (res) {
-    console.log('res', res);
-  }).catch(err => {
+    return res.json();
+  }).then(function (jsonRes){
+    console.log('jRes', jsonRes)
+  })
+  .catch(err => {
     console.log('err', err);
   });
+
 }
 
 function _validateInputs() {
   return true;
+}
+
+function _buildAuction () {
+  let auction = {
+    url: document.getElementById('auction-url').value,
+    name: document.getElementById('auction-name').value,
+    description: document.getElementById('auction-desc').value,
+    basePrice: document.getElementById('auction-base-price').value,
+    minPrice: document.getElementById('auction-min-price').value,
+    maxPrice: document.getElementById('auction-max-price').value,
+    maxOffers: document.getElementById('auction-max-offers').value,
+    publicInfo: document.querySelector('input[name="public-info"]:checked').value
+  }
+  
+  return JSON.stringify(auction);
 }
 </script>
 

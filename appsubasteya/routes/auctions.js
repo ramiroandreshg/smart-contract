@@ -4,20 +4,19 @@ var handlebars = require('handlebars');
 
 /* GET auction page. */
 app.get('/', function(req, res) {
-  console.log(handlebars.partials);
   res.render('auctions', { title: 'Auctions Page' });
 });
 
 app.post('/start', function (req, res) {
-  console.log('starting auction');
-  res.send('OK starting auction');
+  console.log('starting auction', req.body);
+  res.json({ok: 'ok!'});
+
+  // web3 logic here
 });
 
-app.get('/end', function (req, res) {
+app.post('/end', function (req, res) {
   console.log('ending auction');
   res.send('OK ending auction');
 });
-
-/* ToDo: change get request to POST */
 
 module.exports = app;
