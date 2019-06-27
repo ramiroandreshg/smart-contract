@@ -1,12 +1,14 @@
 var express = require('express');
 var app = express.Router();
+var handlebars = require('handlebars');
 
 /* GET auction page. */
 app.get('/', function(req, res) {
+  console.log(handlebars.partials);
   res.render('auctions', { title: 'Auctions Page' });
 });
 
-app.get('/start', function (req, res) {
+app.post('/start', function (req, res) {
   console.log('starting auction');
   res.send('OK starting auction');
 });

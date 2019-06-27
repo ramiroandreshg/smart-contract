@@ -15,14 +15,36 @@
     <label for="auction-hide-info" id="hide-info">
       <input type="radio" id="auction-hide-info" name="public-info" value="hide"> Hide pricing information
     </label>
-    <input type="button" value="Start Auction" />
+    <input type="button" value="Start Auction" data-action="start" onclick="executeForm()"/>
   </form>
 </div>
 
 <script type="text/javascript">
 //auto expand textarea
 function adjust_textarea(h) {
-    h.style.height = "20px";
-    h.style.height = (h.scrollHeight)+"px";
+  h.style.height = "20px";
+  h.style.height = (h.scrollHeight)+"px";
+}
+
+function executeForm() {
+  if (!_validateInputs()) {
+    return;
+  }
+
+  var opts = {
+    method: 'POST',
+    header: {}
+  };
+
+  fetch('/auctions/start', opts).then(function (res) {
+    console.log('res', res);
+  }).catch(err => {
+    console.log('err', err);
+  });
+}
+
+function _validateInputs() {
+  return true;
 }
 </script>
+

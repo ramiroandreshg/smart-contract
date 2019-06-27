@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// const handlebars = require('handlebars');
+const fs = require('fs');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -14,6 +16,11 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+// register partials
+// let partialStr = fs.readFileSync(path.join(__dirname, `/views/auction-scripts.hbs`)).toString();
+// handlebars.registerPartial('auction_scripts', partialStr);
+
 
 app.use(logger('dev'));
 app.use(express.json());
