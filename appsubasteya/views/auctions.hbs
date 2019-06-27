@@ -30,19 +30,18 @@ function executeForm() {
   if (!_validateInputs()) {
     return;
   }
-
   let auctionAction = document.getElementById('auction-button').dataset.action;
-
   if (auctionAction === 'start') {
     _deployContract();
   }
-
   if (auctionAction === 'end') {
     _cancelContract();
   }
-
 }
 
+function _validateInputs() {
+  return true;
+}
 function _deployContract () {
   var auctionData = _buildAuction();  
   var opts = {
@@ -57,7 +56,7 @@ function _deployContract () {
     return res.json();
   }).then(function (jsonRes){
     if(jsonRes.deployed) {
-      disableAndHideFields();
+      _disableAndHideFields();
     } else {
       console.log('err', jsonRes.error);
       alert(jsonRes.error);
@@ -69,10 +68,6 @@ function _deployContract () {
     alert('Unknown deploy error');
     _cleanUpForm();
   });
-}
-
-function _validateInputs() {
-  return true;
 }
 
 function _buildAuction () {
@@ -88,6 +83,26 @@ function _buildAuction () {
   }
   
   return JSON.stringify(auction);
+}
+
+function _disableAndHideFields () {
+  document.getElementById('auction-url').disabled = true;
+  document.getElementById('auction-name').disabled = true;
+  document.getElementById('auction-desc').disabled = true;
+  let publicInfo = document.querySelector('input[name="public-info"]:checked').value;
+  if (publicInfo === 'hide') {
+    document.getElementById('auction-min-price').value = "private";
+    document.getElementById('auction-max-price').value = "private";
+    document.getElementById('auction-max-offers').value = "private";
+  }
+
+  document.getElementById('auction-base-price').disabled = true;
+  document.getElementById('auction-min-price').disabled = true;
+  document.getElementById('auction-max-price').disabled = true;
+  document.getElementById('auction-max-offers').disabled = true;
+  document.querySelectorAll('input[name="public-info"]').forEach(function (elem, idx, list) {
+    elem.disabled = true;
+  });
 }
 
 function _cleanUpForm () {
