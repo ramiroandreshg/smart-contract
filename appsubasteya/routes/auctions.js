@@ -3,7 +3,7 @@ var app = express.Router();
 
 /* GET auction page. */
 app.get('/', function(req, res) {
-  res.render('index', { title: 'Auctions Page' });
+  res.render('auctions', { title: 'Auctions Page' });
 });
 
 app.get('/start', function (req, res) {
