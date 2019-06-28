@@ -24,8 +24,9 @@ app.post('/start', function (req, res) {
 });
 
 app.post('/end', function (req, res) {
-  console.log('ending auction');
-  res.send('OK ending auction');
+  res.json({
+    cancelled: true
+  });
 });
 
 module.exports = app;

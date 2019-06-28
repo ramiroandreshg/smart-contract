@@ -36,7 +36,7 @@ js.auction = (function () {
       return false;
     }
   }
-  
+
   function _deployContract () {
     var auctionData = _buildAuction();  
     var opts = {
@@ -109,7 +109,32 @@ js.auction = (function () {
   }
 
   function _cancelContract () {
-    alert('cancel contract');
+    var opts = {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    fetch('/auctions/end', opts).then(function (res) {
+      return res.json();
+    }).then(function (jsonRes){
+      if(jsonRes.cancelled) {
+        alert('Contract cancelled');
+        _cleanUpForm();
+        let formBtn = document.getElementById('auction-button');
+        formBtn.value = 'Start Auction';
+        formBtn.dataset.action = 'start';
+        formBtn.classList.toggle('end-auction');
+      } else {
+        console.log('err', jsonRes.error);
+        alert(jsonRes.error);
+      }
+    })
+    .catch(err => {
+      console.log('err', err);
+      alert('Unknown deploy error');
+    });
   }
 
   return expose;
