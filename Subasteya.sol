@@ -73,13 +73,13 @@ contract Subasteya {
 
   // function listBids () external activeContract() {}
 
-  function getBid (uint pos) external onlyOpen view returns(address bidder, uint256 amount) {
-    require(pos < getBidsCount(), "The bid requested does not exist yet");
+  function getBid (uint bidNumber) external onlyOpen view returns(address bidder, uint256 amount) {
+    require(bidNumber <= getBidsCount(), "The bid requested does not exist yet");
     
-    return (bids[pos].bidder, bids[pos].amount);
+    return (bids[bidNumber - 1].bidder, bids[bidNumber - 1].amount);
   }
 
-  function closeAuction () external onlyOpen {}
+  function closeAuction () external onlyOwner onlyOpen {}
 
   function getAuctionInfo () external view onlyOpen returns(bytes32 itmUrl, bytes32 itmName, bytes32 itmDesc, uint256 itmBPrice,
     int256 itmPmin, int256 itmPmax, int256 itmMaxOffers){
