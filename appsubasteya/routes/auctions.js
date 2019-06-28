@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express.Router();
 
+var deployedContract; // somewhere we must save the current deployed contract
+
 /* GET auction page. */
 app.get('/', function(req, res) {
   res.send('OK');
