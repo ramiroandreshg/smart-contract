@@ -29,6 +29,7 @@ contract Subasteya {
   enum AuctionState { JustCreated, Open, Finished }
 
   /*  EVENTS */
+  event placeBid(address bidder, uint amount);
 
   /*  CONSTRUCTOR */
   constructor(bytes32 itmUrl, bytes32 itmName, bytes32 itmDesc, uint256 itmBPrice,
@@ -61,6 +62,31 @@ contract Subasteya {
     _;
   }
 
+  modifier betterThanCurrentBid () {
+    require(getBidsCount() == 0 || msg.value > getCurrentAmount(), "betterThanCurrentBid - Bid must be greater than current max offer");
+    _;
+  }
+
+  modifier onlyOtherBidders () {
+    require(getBidsCount() == 0 || msg.sender != getCurrentBidder(), "onlyOtherBidders - Cant accept 2 consecutive bids from same user");
+    _;
+  }
+
+  modifier betterThanBasePrice () {
+    require(msg.value > basePrice, "betterThanBasePrice - Bid must be greater than base price");
+    _;
+  }
+
+  modifier maxOffersNotReached () {
+    require(getBidsCount() < maxOffers, "maxOffersNotReached - Max # of offers got reached");
+    _;
+  }
+
+  modifier minPriceReached () {
+    require(getBidsCount() > 0 && getCurrentAmount() >= minPrice, "minPriceReached - Min Price not reached yet");
+    _;
+  }
+
   /*  PAYABLE FUNCTION */
   function() external payable{}
 
@@ -69,9 +95,18 @@ contract Subasteya {
     state = AuctionState.Open;
   }
 
-  function bid () external onlyOpen {}
+  function bid () external payable onlyOpen maxOffersNotReached onlyOtherBidders betterThanBasePrice betterThanCurrentBid {
+    refundPreviousBestBid();
 
-  // function listBids () external activeContract() {}
+    Bid memory newBid = Bid(msg.sender, msg.value);
+    bids.push(newBid);
+    emit placeBid(msg.sender, msg.value);
+
+    if (automaticAuctionEnd()) {
+      disableContract();
+      makeThePayment();
+    }
+  }
 
   function getBid (uint bidNumber) external onlyOpen view returns(address bidder, uint256 amount) {
     require(bidNumber <= getBidsCount(), "The bid requested does not exist yet");
@@ -79,7 +114,10 @@ contract Subasteya {
     return (bids[bidNumber - 1].bidder, bids[bidNumber - 1].amount);
   }
 
-  function closeAuction () external onlyOwner onlyOpen {}
+  function closeAuction () external onlyOwner onlyOpen minPriceReached {
+    disableContract();
+    makeThePayment();
+  }
 
   function getAuctionInfo () external view onlyOpen returns(bytes32 itmUrl, bytes32 itmName, bytes32 itmDesc, uint256 itmBPrice,
     int256 itmPmin, int256 itmPmax, int256 itmMaxOffers){
@@ -104,22 +142,17 @@ contract Subasteya {
     return (bids[lastIdx].bidder, bids[lastIdx].amount);
   }
 
-  /*  PRIVATE METHODS */
+  /*  PRIVATE METHODS & AUX FUNCTIONS */
   function disableContract () private {
     state = AuctionState.Finished;
-  }
-
-  function checkIfAuctionEnds () private view returns(bool) {
-    return lastBidCoversMaxPrice() || maxOffersReached();
   }
 
   function makeThePayment () private {}
 
   function refundPreviousBestBid () private {}
 
-  /*  AUX FUNCTIONS */
-  function getBidsCount () public onlyOpen view returns(uint256 bidsCount) {
-    return bids.length;
+  function automaticAuctionEnd () private view returns(bool) {
+    return lastBidCoversMaxPrice() || maxOffersReached();
   }
 
   function lastBidCoversMaxPrice () private view returns(bool) {
@@ -130,4 +163,22 @@ contract Subasteya {
     return getBidsCount() >= maxOffers;
   }
 
+  /*  GETTERS */
+  function getBidsCount () public onlyOpen view returns(uint256 bidsCount) {
+    return bids.length;
+  }
+
+  // PreCondition: only called with bidsCount > 0
+  function getCurrentAmount () private view returns(uint256 amount) {
+    uint256 bidsCount = getBidsCount();
+
+    return bids[bidsCount - 1].amount;
+  }
+
+  // PreCondition: only called with bidsCount > 0
+  function getCurrentBidder () private view returns(address bidder) {
+    uint256 bidsCount = getBidsCount();
+    
+    return bids[bidsCount - 1].bidder;
+  }
 }
