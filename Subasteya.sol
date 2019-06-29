@@ -4,9 +4,9 @@ contract Subasteya {
   /*  VARIABLES */
   address payable private owner;
 
-  bytes32 private url;
-  bytes32 private name;
-  bytes32 private description;
+  string private url;
+  string private name;
+  string private description;
 
   uint256 private basePrice;
   uint256 private minPrice;
@@ -32,7 +32,7 @@ contract Subasteya {
   event placeBid(address bidder, uint amount);
 
   /*  CONSTRUCTOR */
-  constructor(bytes32 itmUrl, bytes32 itmName, bytes32 itmDesc, uint256 itmBPrice,
+  constructor(string memory itmUrl, string memory itmName, string memory itmDesc, uint256 itmBPrice,
     uint256 itmPmin, uint256 itmPmax, uint256 itmMaxOffers, bool hiddenPrices) public {
     owner = msg.sender;
     url = itmUrl;
@@ -119,8 +119,10 @@ contract Subasteya {
     makeThePayment();
   }
 
-  function getAuctionInfo () external view onlyOpen returns(bytes32 itmUrl, bytes32 itmName, bytes32 itmDesc, uint256 itmBPrice,
+  function getAuctionInfo () external view onlyOpen returns(string memory itmUrl,
+    string memory itmName, string memory itmDesc, uint256 itmBPrice,
     int256 itmPmin, int256 itmPmax, int256 itmMaxOffers){
+    
     int256 pMin = int(minPrice);
     int256 pMax = int(maxPrice);
     int256 mOffers = int(maxOffers);
