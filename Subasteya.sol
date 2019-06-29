@@ -2,7 +2,7 @@ pragma solidity ^0.5.3;
 
 contract Subasteya {
   /*  VARIABLES */
-  address private owner;
+  address payable private owner;
 
   bytes32 private url;
   bytes32 private name;
@@ -13,7 +13,7 @@ contract Subasteya {
   uint256 private maxPrice;
   uint256 private maxOffers;
 
-  bool private showPrices;
+  bool private hidePrices;
 
   Bid[] private bids;
 
@@ -21,19 +21,19 @@ contract Subasteya {
 
   /*  STRUCTS */
   struct Bid {
-    address bidder;
+    address payable bidder;
     uint256 amount;
   }
 
   /*  ENUMS */
-  enum AuctionState { JustCreated, Open, Finished }
+  enum AuctionState { JustCreated, Open, Disabled }
 
   /*  EVENTS */
   event placeBid(address bidder, uint amount);
 
   /*  CONSTRUCTOR */
   constructor(bytes32 itmUrl, bytes32 itmName, bytes32 itmDesc, uint256 itmBPrice,
-    uint256 itmPmin, uint256 itmPmax, uint256 itmMaxOffers, bool publicPrices) public {
+    uint256 itmPmin, uint256 itmPmax, uint256 itmMaxOffers, bool hiddenPrices) public {
     owner = msg.sender;
     url = itmUrl;
     name = itmName;
@@ -42,7 +42,7 @@ contract Subasteya {
     minPrice = itmPmin;
     maxPrice = itmPmax;
     maxOffers = itmMaxOffers;
-    showPrices = publicPrices;
+    hidePrices = hiddenPrices;
     state = AuctionState.JustCreated;
   }
 
@@ -125,7 +125,7 @@ contract Subasteya {
     int256 pMax = int(maxPrice);
     int256 mOffers = int(maxOffers);
     
-    if (showPrices) {
+    if (hidePrices) {
      pMin = -1;
      pMax = -1;
      mOffers = -1;
@@ -144,12 +144,23 @@ contract Subasteya {
 
   /*  PRIVATE METHODS & AUX FUNCTIONS */
   function disableContract () private {
-    state = AuctionState.Finished;
+    state = AuctionState.Disabled;
   }
 
-  function makeThePayment () private {}
+  function makeThePayment () private {
+    uint256 amountOffered = getCurrentAmount();
 
-  function refundPreviousBestBid () private {}
+    owner.transfer(amountOffered);
+  }
+  
+  function refundPreviousBestBid () private {
+    if (getBidsCount() > 0) {
+      address payable lastBidder = getCurrentBidder();
+      uint256 amountOffered = getCurrentAmount();
+
+      lastBidder.transfer(amountOffered);
+    }
+  }
 
   function automaticAuctionEnd () private view returns(bool) {
     return lastBidCoversMaxPrice() || maxOffersReached();
@@ -176,7 +187,7 @@ contract Subasteya {
   }
 
   // PreCondition: only called with bidsCount > 0
-  function getCurrentBidder () private view returns(address bidder) {
+  function getCurrentBidder () private view returns(address payable bidder) {
     uint256 bidsCount = getBidsCount();
     
     return bids[bidsCount - 1].bidder;
