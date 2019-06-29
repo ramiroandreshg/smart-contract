@@ -3,7 +3,7 @@ const i = require('./../tools/internals');
 
 const app = express.Router();
 
-var deployedContract; // somewhere we must save the current deployed contract
+var deployedContractAddress; // somewhere we must save the current deployed contract
 
 /* GET auction page. */
 app.get('/', function(req, res) {
@@ -22,23 +22,17 @@ app.get('/new', function(req, res) {
 app.post('/start', async function (req, res) {
   const args = req.body;
 
-  const result = await i.deployContract(args);
-
-  console.log('END START', result);
+  const output = {};
   
+  try {
+    deployedContractAddress = await i.deployContract(args);
+    output.deployed = true;
+  } catch (err) {
+    console.log('Auction Start ERROR -> ', err);
+    output.deployed = false;
+  }
   
-  // web3 logic here
-  
-  res.json({
-    deployed: true
-  });
-
-  /* Error Example
-  res.json({
-    deployed: false,
-    error: "not enough ether"
-  });
-  */
+  res.json(output);
 });
 
 app.post('/end', function (req, res) {

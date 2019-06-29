@@ -24,7 +24,7 @@ exports.deploy = async (account, params) => {
     from: account,
     value: 0
   });
-  console.log('contract address: '+ result.options.address);
+  
   return result.options.address;
 }
 

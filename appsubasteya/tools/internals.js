@@ -10,13 +10,7 @@ exports.deployContract = async function (args) {
   args.publicInfo = args.publicInfo === 'hide' ? true : false;
   const params = Object.values(args);
 
-  let contractAddress = '0x0rh';
-  try {
-    contractAddress = await d.deploy(accounts[9], params);
-  } catch (err) { 
-    console.log('err -> ', err);
-  }
+  const contractAddress = await d.deploy(accounts[9], params);
 
-  console.log('contractAddress', contractAddress);
   return contractAddress;
 }
