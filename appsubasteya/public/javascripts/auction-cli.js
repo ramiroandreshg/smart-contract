@@ -93,7 +93,7 @@ js.auction = (function () {
 
   function _disableAndHideFields () {
     if (elems.publicInfo.value === 'hide') {
-      elems.minPrice.value = "privates";
+      elems.minPrice.value = "private";
       elems.maxPrice.value = "private";
       elems.maxOffers.value = "private";
     }

@@ -1,4 +1,6 @@
 const express = require('express');
+const i = require('./../tools/internals');
+
 const app = express.Router();
 
 var deployedContract; // somewhere we must save the current deployed contract
@@ -17,16 +19,13 @@ app.get('/new', function(req, res) {
   res.render('auctions', { title: 'Auctions Page'});
 });
 
-app.get('/bid', function(req, res) {
-  res.send('OK');
+app.post('/start', async function (req, res) {
+  const args = req.body;
 
-  /*
-    web3 logic to send a bid to the current auction
-  */
-});
+  const result = await i.deployContract(args);
 
-app.post('/start', function (req, res) {
-  let args = req.body;
+  console.log('END START', result);
+  
   
   // web3 logic here
   
@@ -46,6 +45,14 @@ app.post('/end', function (req, res) {
   res.json({
     cancelled: true
   });
+});
+
+app.get('/bid', function(req, res) {
+  res.send('OK');
+
+  /*
+    web3 logic to send a bid to the current auction
+  */
 });
 
 module.exports = app;
