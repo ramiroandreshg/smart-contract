@@ -72,8 +72,8 @@ contract Subasteya {
     _;
   }
 
-  modifier betterThanBasePrice () {
-    require(msg.value >= basePrice, "betterThanBasePrice - Bid must be greater than base price");
+  modifier atLeastCoversBasePrice () {
+    require(msg.value >= basePrice, "atLeastCoversBasePrice - Bid must be equal or greater than base price");
     _;
   }
 
@@ -95,7 +95,7 @@ contract Subasteya {
     state = AuctionState.Open;
   }
 
-  function bid () external payable onlyOpen maxOffersNotReached onlyOtherBidders betterThanBasePrice betterThanCurrentBid {
+  function bid () external payable onlyOpen maxOffersNotReached onlyOtherBidders atLeastCoversBasePrice betterThanCurrentBid {
     refundPreviousBestBid();
 
     Bid memory newBid = Bid(msg.sender, msg.value);
@@ -108,7 +108,7 @@ contract Subasteya {
     }
   }
 
-  function getBid (uint bidNumber) external onlyOpen view returns(address bidder, uint256 amount) {
+  function getBid (uint256 bidNumber) external onlyOpen view returns(address bidder, uint256 amount) {
     require(bidNumber <= getBidsCount(), "The bid requested does not exist yet");
     
     return (bids[bidNumber - 1].bidder, bids[bidNumber - 1].amount);
@@ -153,6 +153,7 @@ contract Subasteya {
     owner.transfer(address(this).balance);
   }
   
+  // PreCondition: the refund takes place before new bid gets into bids array
   function refundPreviousBestBid () private {
     if (getBidsCount() > 0) {
       address payable lastBidder = getCurrentBidder();
