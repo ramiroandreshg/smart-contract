@@ -73,7 +73,7 @@ contract Subasteya {
   }
 
   modifier betterThanBasePrice () {
-    require(msg.value > basePrice, "betterThanBasePrice - Bid must be greater than base price");
+    require(msg.value >= basePrice, "betterThanBasePrice - Bid must be greater than base price");
     _;
   }
 
