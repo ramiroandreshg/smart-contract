@@ -150,9 +150,7 @@ contract Subasteya {
   }
 
   function makeThePayment () private {
-    uint256 amountOffered = getCurrentAmount();
-
-    owner.transfer(amountOffered);
+    owner.transfer(address(this).balance);
   }
   
   function refundPreviousBestBid () private {
