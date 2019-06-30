@@ -16,7 +16,7 @@ js.auction = (function () {
       if (elems.formBtn.dataset.action === 'start') {
         _deployContract();
       }
-      if (auctionActionBtn.dataset.action === 'end') {
+      if (elems.formBtn.dataset.action === 'end') {
         _cancelContract();
       }
     }
@@ -32,6 +32,7 @@ js.auction = (function () {
       maxPrice: document.getElementById('auction-max-price'),
       maxOffers: document.getElementById('auction-max-offers'),
       publicInfo: document.querySelector('input[name="public-info"]:checked'),
+      ownerAddress: document.getElementById('auction-owner-address'),
       formBtn: document.getElementById('auction-button')
     }
   }  
@@ -87,6 +88,9 @@ js.auction = (function () {
       maxOffers: elems.maxOffers.value,
       publicInfo: elems.publicInfo.value
     }
+    if (elems.ownerAddress.value) {
+      auction.ownerAddress = elems.ownerAddress.value 
+    }    
     
     return JSON.stringify(auction);
   }
@@ -119,11 +123,17 @@ js.auction = (function () {
   }
 
   function _cancelContract () {
+    if (!elems.ownerAddress.value) {
+      alert('Owner Address required');
+      return;
+    }
+
     var opts = {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify({owner: elems.ownerAddress.value})
     };
 
     fetch('/auctions/end', opts).then(function (res) {

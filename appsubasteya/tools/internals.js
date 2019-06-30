@@ -1,13 +1,19 @@
 const Web3 = require('web3');
 const d = require('./deploy');
 
-const web3 = new Web3(new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')); //todo: config para urls repetidas en el codigo
+const web3 = new Web3(new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')); //ToDo: config para urls repetidas en el codigo
 
 exports = module.exports = {};
 
 exports.deployContract = async function (args) {
-  const accounts = await web3.eth.getAccounts();
-  const owner = accounts[0];
+  let owner;
+  if (!args.ownerAddress) {
+    const accounts = await web3.eth.getAccounts();
+    owner = accounts[0];
+  } else {
+    owner = args.ownerAddress;
+    delete args.ownerAddress;
+  }
 
   args.publicInfo = args.publicInfo === 'hide' ? true : false;
   const params = Object.values(args);
@@ -22,7 +28,9 @@ exports.deployContract = async function (args) {
 async function _openAuction (owner, contractAddress) {
   const contractInstance = new web3.eth.Contract(d.abi, contractAddress);
 
-  return contractInstance.methods.openAuction().send({from: owner})
+  return contractInstance.methods.openAuction().send({
+    from: owner
+  });
 };
 
 exports.getAllBids = async function (contractAddress) {
@@ -34,11 +42,14 @@ exports.getAllBids = async function (contractAddress) {
 
   const bidsCount = await contractInstance.methods.getBidsCount().call();
   let bidList = [];
+  let bid;
  
   if (bidsCount > 0) {
-    for (let i = 1; i <= bidsCount.length; i++) { 
+    for (let i = 1; i <= bidsCount; i++) { 
+      console.log('i:', i);
       try {
-        const bid = await _getBid(i, contractInstance);
+        bid = await _getBid(i, contractInstance);
+        console.log('b', bid);
         bidList.push(bid);
       } catch (err) {
         console.log('Unable to fetch bid number #', i);
@@ -47,6 +58,7 @@ exports.getAllBids = async function (contractAddress) {
     } 
   }
 
+  console.log('bLIST', bidList);
   return bidList;
 };
 
@@ -73,5 +85,14 @@ exports.placeBid = async function (contractAddress, args) {
   await contractInstance.methods.bid().send({
     from: bidder,
     value: amount
+  });
+};
+
+exports.closeAuction = async function (contractAddress, args) {
+  const owner = args.owner;
+  
+  const contractInstance = new web3.eth.Contract(d.abi, contractAddress);
+  await contractInstance.methods.closeAuction().send({
+    from: owner
   });
 };

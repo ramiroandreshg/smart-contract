@@ -5,19 +5,6 @@ const app = express.Router();
 
 let deployedContractAddress;
 
-/* GET auction page. */
-app.get('/', async function(req, res) {
-  let output = {};
-  try {
-    const bidList = await i.getAllBids(deployedContractAddress);
-    output = bidList;
-  } catch (err) {
-    console.log('Bid List Start ERROR -> ', err.message);
-    output.error = err.message;
-  }
-  
-  res.json(output);
-});
 
 app.get('/new', function(req, res) {
   res.render('auctions', { title: 'Auctions Page'});
@@ -39,10 +26,33 @@ app.post('/start', async function (req, res) {
   res.json(output);
 });
 
-app.post('/end', function (req, res) {
-  res.json({
-    success: true
-  });
+app.post('/end', async function (req, res) {
+  const args = req.body;
+  
+  const output = {};
+  try {
+    await i.closeAuction(deployedContractAddress, args);
+    output.success = true;
+  } catch (err) {
+    console.log('End Auction ERROR -> ', err.message);
+    output.success = false;
+    output.error = err.message;
+  }
+  
+  res.json(output);
+});
+
+app.get('/bids', async function(req, res) {
+  let output = {};
+  try {
+    const bidList = await i.getAllBids(deployedContractAddress);
+    output = bidList;
+  } catch (err) {
+    console.log('Bid List Start ERROR -> ', err.message);
+    output.error = err.message;
+  }
+  
+  res.json(output);
 });
 
 app.get('/bid', function(req, res) {
