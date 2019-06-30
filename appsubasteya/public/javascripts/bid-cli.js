@@ -48,6 +48,7 @@ js.bid = (function () {
     .then(function (jsonRes){
       if(jsonRes.success) {
         alert('Bid successfully placed');
+        _cleanUpForm()
       } else {
         console.log('err', jsonRes.error);
         alert(jsonRes.error);
@@ -56,8 +57,7 @@ js.bid = (function () {
     .catch(err => {
       console.log('err', err);
       alert('Unknown bid error');
-    })
-    .finally(_cleanUpForm());
+    });
   }
 
   function _buildBid () {

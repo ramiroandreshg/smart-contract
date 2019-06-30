@@ -70,7 +70,7 @@ exports.placeBid = async function (contractAddress, args) {
   const bidder = args.address;
   const amount = args.amount;
 
-  contractInstance.methods.bid().send({
+  await contractInstance.methods.bid().send({
     from: bidder,
     value: amount
   });

@@ -57,9 +57,9 @@ app.post('/bid', async function(req, res) {
     await i.placeBid(deployedContractAddress, args);
     output.success = true;
   } catch (err) {
-    console.log('Place Bid ERROR -> ', err);
+    console.log('Place Bid ERROR -> ', err.message);
     output.success = false;
-    output.error = err;
+    output.error = err.message;
   }
   
   res.json(output);
