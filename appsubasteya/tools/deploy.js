@@ -9,6 +9,8 @@ const _bytecode = '0x' + bytecode.bytecode.object;
 
 const _abi = require('./../contracts/abi.json');
 
+// rinkeby endpoint: rinkeby.infura.io/v3/969c6e3184564fa68c449771085e8ef1
+
 exports.deploy = async (account, params) => {
   const web3 = new Web3(new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545'));
   const result = await new web3.eth.Contract(_abi)
