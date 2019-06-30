@@ -17,7 +17,6 @@ exports.deployContract = async function (args) {
 
   args.publicInfo = args.publicInfo === 'hide' ? true : false;
   const params = Object.values(args);
-
   const contractAddress = await d.deploy(owner, params);
 
   await _openAuction(owner, contractAddress);
@@ -47,10 +46,8 @@ exports.getAllBids = async function (contractAddress) {
  
   if (bidsCount > 0) {
     for (let i = 1; i <= bidsCount; i++) { 
-      console.log('i:', i);
       try {
         bid = await _getBid(i, contractInstance);
-        console.log('b', bid);
         bidList.push(bid);
       } catch (err) {
         console.log('Unable to fetch bid number #', i);
@@ -59,7 +56,6 @@ exports.getAllBids = async function (contractAddress) {
     } 
   }
 
-  console.log('bLIST', bidList);
   return bidList;
 };
 

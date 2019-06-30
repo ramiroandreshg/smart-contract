@@ -2,9 +2,7 @@ const express = require('express');
 const i = require('./../tools/internals');
 
 const app = express.Router();
-
 let deployedContractAddress;
-
 
 app.get('/new', function(req, res) {
   res.render('auctions', { title: 'Auctions Page'});
