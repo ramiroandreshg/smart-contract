@@ -29,10 +29,10 @@ app.post('/start', async function (req, res) {
   const output = {};
   try {
     deployedContractAddress = await i.deployContract(args);
-    output.deployed = true;
+    output.success = true; // should handle this with HTTP error codes 
   } catch (err) {
     console.log('Auction Start ERROR -> ', err);
-    output.deployed = false;
+    output.success = false;
   }
   
   res.json(output);
@@ -46,10 +46,25 @@ app.post('/end', function (req, res) {
 
 app.get('/bid', function(req, res) {
   res.send('OK');
+  // render form to place bid
+});
 
-  /*
-    web3 logic to send a bid to the current auction
-  */
+app.post('/bid', async function(req, res) {
+  const args = req.body; // amount, bidder
+
+  args.address = '0xEB4dBc03D61248e91F9b0D4CDd74438EB58950b1';
+  args.amount = '500000000000000000';
+
+  const output = {};
+  try {
+    await i.placeBid(deployedContractAddress, args);
+    output.success = true;
+  } catch (err) {
+    console.log('Place Bid ERROR -> ', err);
+    output.success = false;
+  }
+  
+  res.json(output);
 });
 
 module.exports = app;

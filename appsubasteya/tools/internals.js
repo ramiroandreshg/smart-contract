@@ -38,10 +38,11 @@ exports.getAllBids = async function (contractAddress) {
   if (bidsCount > 0) {
     for (let i = 1; i <= bidsCount.length; i++) { 
       try {
-        const bid = await _getBid(bidNumber, contractInstance);
+        const bid = await _getBid(i, contractInstance);
         bidList.push(bid);
       } catch (err) {
         console.log('Unable to fetch bid number #', i);
+        console.log('error: ', err);
       }
     } 
   }
@@ -50,5 +51,27 @@ exports.getAllBids = async function (contractAddress) {
 };
 
 async function _getBid(bidNumber, contractInstance) {
-  return contractInstance.methods.getBid(bidNumber).call();
-}
+  const bid = await contractInstance.methods.getBid(bidNumber).call();
+  
+  return {
+    bidNumber,
+    bidderAddress: bid.bidder,
+    amount: bid.amount
+  }
+};
+
+exports.placeBid = async function (contractAddress, args) {
+  if (!contractAddress) {
+    throw new Error('undefined contract address');
+  }
+
+  const contractInstance = new web3.eth.Contract(d.abi, contractAddress);
+
+  const bidder = args.address;
+  const amount = args.amount;
+
+  contractInstance.methods.bid().send({
+    from: bidder,
+    value: amount
+  });
+};

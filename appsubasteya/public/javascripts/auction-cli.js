@@ -61,7 +61,7 @@ js.auction = (function () {
     fetch('/auctions/start', opts).then(function (res) {
       return res.json();
     }).then(function (jsonRes){
-      if(jsonRes.deployed) {
+      if(jsonRes.success) {
         _disableAndHideFields();
       } else {
         console.log('err', jsonRes.error);
