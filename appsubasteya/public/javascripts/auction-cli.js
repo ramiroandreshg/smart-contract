@@ -5,16 +5,15 @@ js.auction = (function () {
   var expose = {
     adjustTextarea: (txtArea) => {
       txtArea.style.height = "20px";
-      txtArea.style.height = (txtArea.scrollHeight)+"px";
-    }, 
-
+      txtArea.style.height = (txtArea.scrollHeight) + "px";
+    },
     executeForm: () => {
       elems = _gatherFormElements();
       if (!_validateInputs()) {
         return;
       }
-      let auctionActionBtn = document.getElementById('auction-button');
-      if (auctionActionBtn.dataset.action === 'start') {
+      
+      if (elems.formBtn.dataset.action === 'start') {
         _deployContract();
       }
       if (auctionActionBtn.dataset.action === 'end') {
@@ -39,9 +38,9 @@ js.auction = (function () {
 
   function _validateInputs() {
     if (elems.url.value && elems.name.value && elems.description.value &&
-      elems.basePrice.value && elems.minPrice.value && elems.maxPrice.value &&
-      elems.maxOffers.value) {
-        return true;
+    elems.basePrice.value && elems.minPrice.value && elems.maxPrice.value &&
+    elems.maxOffers.value) {
+      return true;
     } else {
       alert('Incomplete Form')
       return false;
@@ -60,7 +59,8 @@ js.auction = (function () {
 
     fetch('/auctions/start', opts).then(function (res) {
       return res.json();
-    }).then(function (jsonRes){
+    })
+    .then(function (jsonRes){
       if(jsonRes.success) {
         _disableAndHideFields();
       } else {
@@ -104,6 +104,7 @@ js.auction = (function () {
     elems.minPrice.disabled = true;
     elems.maxPrice.disabled = true;
     elems.maxOffers.disabled = true;
+    
     document.querySelectorAll('input[name="public-info"]').forEach(function (el, idx, list) {
       el.disabled = true;
     });
@@ -127,8 +128,9 @@ js.auction = (function () {
 
     fetch('/auctions/end', opts).then(function (res) {
       return res.json();
-    }).then(function (jsonRes){
-      if(jsonRes.cancelled) {
+    })
+    .then(function (jsonRes){
+      if(jsonRes.success) {
         alert('Contract cancelled');
         _cleanUpForm();
         let formBtn = document.getElementById('auction-button');
@@ -142,7 +144,7 @@ js.auction = (function () {
     })
     .catch(err => {
       console.log('err', err);
-      alert('Unknown deploy error');
+      alert('Unknown error when closing auction');
     });
   }
 
