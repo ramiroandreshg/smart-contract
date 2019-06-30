@@ -5,24 +5,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
 
-// const handlebars = require('handlebars');
-// const fs = require('fs');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 const auctionsRouter = require('./routes/auctions');
-
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
-// register partials
-// let partialStr = fs.readFileSync(path.join(__dirname, `/views/auction-scripts.hbs`)).toString();
-// handlebars.registerPartial('auction_scripts', partialStr);
-
 
 app.use(logger('dev'));
 app.use(cookieParser());
@@ -32,8 +21,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/auctions', auctionsRouter);
 
 // catch 404 and forward to error handler
