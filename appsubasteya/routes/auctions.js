@@ -33,6 +33,7 @@ app.post('/start', async function (req, res) {
   } catch (err) {
     console.log('Auction Start ERROR -> ', err);
     output.success = false;
+    output.error = err;
   }
   
   res.json(output);
@@ -40,7 +41,7 @@ app.post('/start', async function (req, res) {
 
 app.post('/end', function (req, res) {
   res.json({
-    cancelled: true
+    success: true
   });
 });
 
@@ -49,10 +50,8 @@ app.get('/bid', function(req, res) {
 });
 
 app.post('/bid', async function(req, res) {
-  const args = req.body; // amount, bidder
+  const args = req.body;
 
-  console.log('args', args);
-/*
   const output = {};
   try {
     await i.placeBid(deployedContractAddress, args);
@@ -60,10 +59,10 @@ app.post('/bid', async function(req, res) {
   } catch (err) {
     console.log('Place Bid ERROR -> ', err);
     output.success = false;
+    output.error = err;
   }
   
-  res.json(output); */
-  res.json({success: true});
+  res.json(output);
 });
 
 module.exports = app;
