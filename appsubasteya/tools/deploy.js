@@ -2,19 +2,16 @@
 const Web3 = require('web3');
 // const ganache = require("ganache-cli");
 
-const abi = require('./../contracts/abi.json');
-const bytecode = require('./../contracts/bytecode.json');
-
-//const web3 = new Web3(provider);
-
-
 exports = module.exports = {};
 
+const bytecode = require('./../contracts/bytecode.json');
+const _bytecode = '0x' + bytecode.bytecode.object;
+
+const _abi = require('./../contracts/abi.json');
+
 exports.deploy = async (account, params) => {
-  const _bytecode = '0x' + bytecode.bytecode.object;
-  
   const web3 = new Web3(new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545'));
-  const result = await new web3.eth.Contract(abi)
+  const result = await new web3.eth.Contract(_abi)
   .deploy({
     data: _bytecode,
     arguments: params
@@ -27,4 +24,7 @@ exports.deploy = async (account, params) => {
   
   return result.options.address;
 }
+
+exports.abi = _abi;
+exports.bytecode = _bytecode;
 

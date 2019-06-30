@@ -3,16 +3,20 @@ const i = require('./../tools/internals');
 
 const app = express.Router();
 
-var deployedContractAddress; // somewhere we must save the current deployed contract
+let deployedContractAddress;
 
 /* GET auction page. */
-app.get('/', function(req, res) {
-  res.send('OK');
-
-  /*
-    web3 logic to fech all auctions from current contract and reeturn them as a json
-    Algo we should make the current best bid always VISIBLE
-  */
+app.get('/', async function(req, res) {
+  let output = {};
+  try {
+    const bidList = await i.getAllBids(deployedContractAddress);
+    output = bidList;
+  } catch (err) {
+    console.log('Bid List Start ERROR -> ', err.message);
+    output.error = err.message;
+  }
+  
+  res.json(output);
 });
 
 app.get('/new', function(req, res) {
@@ -23,7 +27,6 @@ app.post('/start', async function (req, res) {
   const args = req.body;
 
   const output = {};
-  
   try {
     deployedContractAddress = await i.deployContract(args);
     output.deployed = true;
