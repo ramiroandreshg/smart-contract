@@ -29,6 +29,7 @@ async function _openAuction (owner, contractAddress) {
   const contractInstance = new web3.eth.Contract(d.abi, contractAddress);
 
   return contractInstance.methods.openAuction().send({
+    gas: '3000000',
     from: owner
   });
 };
@@ -83,6 +84,7 @@ exports.placeBid = async function (contractAddress, args) {
   const amount = args.amount;
 
   await contractInstance.methods.bid().send({
+    gas: '3000000',
     from: bidder,
     value: amount
   });
@@ -93,6 +95,7 @@ exports.closeAuction = async function (contractAddress, args) {
   
   const contractInstance = new web3.eth.Contract(d.abi, contractAddress);
   await contractInstance.methods.closeAuction().send({
+    gas: '3000000',
     from: owner
   });
 };
