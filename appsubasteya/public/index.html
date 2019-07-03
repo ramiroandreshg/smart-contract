@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-us" ng-app="myApp">
+  <head>
+    <title>Auctions</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="UTF-8">
+
+    <!-- load bootstrap and fontawesome via CDN -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <style>
+        html, body, input, select, textarea
+        {
+            font-size: 1.05em;
+        }
+    </style>
+    
+    <!-- load angular via CDN -->
+    <script src="//code.angularjs.org/1.3.0-rc.1/angular.min.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/javascripts/auction-cli.js"></script>
+    <script src="app/javascripts/bid-cli.js"></script>
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">SubasteYA</a>
+        </div>
+      </div>
+     </nav>
+    </header>
+
+      <div class="container">
+
+          <div ng-controller="auctionController">
+          
+            <div class="auction">
+              <h2>Auction Information</h2>
+              <form id="auction-form">
+                <input type="text" id="auction-url" placeholder="URL">
+                <input type="text" id="auction-name" placeholder="Name">
+                <textarea type="text" id="auction-desc" placeholder="Description" onkeyup="js.auction.adjustTextarea(this)"></textarea>
+                <input type="text" id="auction-base-price" placeholder="Base Price">
+                <input type="text" id="auction-min-price" placeholder="Min. Price">
+                <input type="text" id="auction-max-price" placeholder="Max. Price">
+                <input type="text" id="auction-max-offers" placeholder="Max. offers">
+                <input type="text" id="auction-owner-address" placeholder="Owner Address">
+                <label for="auction-show-info" id="show-info">
+                  <input type="radio" id="auction-show-info" name="public-info" value="show" checked> Show pricing information
+                </label>
+                <label for="auction-hide-info" id="hide-info">
+                  <input type="radio" id="auction-hide-info" name="public-info" value="hide"> Hide pricing information
+                </label>
+                <input type="button" id="auction-button" value="Start Auction" data-action="start" onclick="js.auction.executeForm()"/>
+              </form>
+            </div>
+              
+          <hr />
+          </div>
+          
+          <div ng-controller="bidController">
+            <div class="auction">
+              <h2>Bid Information</h2>
+              <form id="bid-form">
+                <input type="text" id="bid-amount" placeholder="Amount">
+                <input type="text" id="bid-address" placeholder="Address">
+                <input type="button" id="bid-button" value="Place Bid" onclick="js.bid.executeForm()"/>
+              </form>
+            </div>
+          
+          <hr />
+          </div>
+          
+          <div ng-controller="bidListController">
+          
+            <div class="auction">
+              <h2>Bids</h2>
+              
+            </div>
+          
+          <hr />
+          </div>
+            
+        </div>
+  </div>
+
+  </body>
+</html>
