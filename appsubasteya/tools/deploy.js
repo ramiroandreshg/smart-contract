@@ -1,6 +1,5 @@
-// const HDWalletProvider = require('truffle-hdwallet-provider');
 const Web3 = require('web3');
-// const ganache = require("ganache-cli");
+const provider = require('./provider');
 
 exports = module.exports = {};
 
@@ -12,7 +11,7 @@ const _abi = require('./../contracts/abi.json');
 // rinkeby endpoint: rinkeby.infura.io/v3/969c6e3184564fa68c449771085e8ef1
 
 exports.deploy = async (account, params) => {
-  const web3 = new Web3(new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545'));
+  const web3 = new Web3(provider.HDWalletProvider);
   const result = await new web3.eth.Contract(_abi)
   .deploy({
     data: _bytecode,
@@ -23,6 +22,8 @@ exports.deploy = async (account, params) => {
     from: account,
     value: 0
   });
+
+  console.log('address', result.options.address);
   
   return result.options.address;
 }

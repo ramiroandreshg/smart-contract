@@ -1,7 +1,8 @@
 const Web3 = require('web3');
 const d = require('./deploy');
+const provider = require('./provider');
 
-const web3 = new Web3(new Web3.providers.HttpProvider('HTTP://127.0.0.1:8545')); //ToDo: config para urls repetidas en el codigo
+const web3 = new Web3(provider.HDWalletProvider);
 
 exports = module.exports = {};
 
