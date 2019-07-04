@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="stylesheets/style.css" />
     <style>
-        html, body, input, select, textarea
-        {
-            font-size: 1.05em;
-        }
+      html, body, input, select, textarea
+      {
+          font-size: 1.05em;
+      }
     </style>
     
     <!-- load angular via CDN -->
@@ -34,34 +34,31 @@
     </header>
 
     <div class="container">
-
       <div ng-controller="auctionController">
-        
-          <div class="auction">
-            <h2>Auction Information</h2>
-            <form id="auction-form">
-              <input type="text" id="auction-url" placeholder="URL" ng-model="auction.url">
-              <input type="text" id="auction-name" placeholder="Name" ng-model="auction.name">
-              <textarea type="text" id="auction-description" placeholder="Description" ng-model="auction.description"></textarea>
-              <input type="text" id="auction-base-price" placeholder="Base Price" ng-model="auction.basePrice">
-              <input type="text" id="auction-min-price" placeholder="Min. Price" ng-model="auction.minPrice">
-              <input type="text" id="auction-max-price" placeholder="Max. Price" ng-model="auction.maxPrice">
-              <input type="text" id="auction-max-offers" placeholder="Max. offers" ng-model="auction.maxOffers">
-              <input type="text" id="auction-owner-address" placeholder="Owner Address" ng-model="auction.ownerAddress">
-              <label for="auction-show-info" id="show-info">
-                <input type="radio" id="auction-show-info" name="public-info" value="show" ng-model="auction.publicInfo" checked> Show pricing information
-              </label>
-              <label for="auction-hide-info" id="hide-info">
-                <input type="radio" id="auction-hide-info" name="public-info" value="hide" ng-model="auction.publicInfo"> Hide pricing information
-              </label>
-              <input type="button" id="auction-button" value="Start Auction" data-action="start" ng-click="contract()"/>
-            </form>
-            <span ng-if="auctionAddress" style="font-style: italic; color: grey; font-size: small;">Contract Address: {{ auctionAddress }}</span>
-          </div>
-            
+        <div class="auction">
+          <h2>Auction Information</h2>
+          <form id="auction-form">
+            <input type="text" id="auction-url" placeholder="URL" ng-model="auction.url">
+            <input type="text" id="auction-name" placeholder="Name" ng-model="auction.name">
+            <textarea type="text" id="auction-description" placeholder="Description" ng-model="auction.description"></textarea>
+            <input type="text" id="auction-base-price" placeholder="Base Price" ng-model="auction.basePrice">
+            <input type="text" id="auction-min-price" placeholder="Min. Price" ng-model="auction.minPrice">
+            <input type="text" id="auction-max-price" placeholder="Max. Price" ng-model="auction.maxPrice">
+            <input type="text" id="auction-max-offers" placeholder="Max. offers" ng-model="auction.maxOffers">
+            <input type="text" id="auction-owner-address" placeholder="Owner Address" ng-model="auction.ownerAddress">
+            <label for="auction-show-info" id="show-info">
+              <input type="radio" id="auction-show-info" name="public-info" value="show" ng-model="auction.publicInfo" checked> Show pricing information
+            </label>
+            <label for="auction-hide-info" id="hide-info">
+              <input type="radio" id="auction-hide-info" name="public-info" value="hide" ng-model="auction.publicInfo"> Hide pricing information
+            </label>
+            <input type="button" id="auction-button" value="Start Auction" data-action="start" ng-click="contract()"/>
+          </form>
+          <span ng-if="auctionAddress" style="font-style: italic; color: grey; font-size: small;">Contract Address: {{ auctionAddress }}</span>
+        </div>
+
         <hr />
-        
-        
+
         <div class="auction">
           <h2>Bid Information</h2>
           <form id="bid-form">
@@ -72,21 +69,17 @@
           <span ng-if="bestBid" style="font-style: italic; color: grey; font-size: small;">Best Bid: {{ bestBid }}</span>
         </div>
       
-      <hr />
-        
-      <div class="auction">
-        <h2>Bids</h2>
-        <div style="font-size:x-small;color:grey;"  class="bids" ng-repeat="bid in bids">
-          <span>{{  bid.amount }}</span>
-          |
-          <span>{{  bid.bidderAddress }}</span>
+        <hr />
+          
+        <div class="auction">
+          <h2>Bids</h2>
+          <div style="font-size:x-small;color:grey;"  class="bids" ng-repeat="bid in bids">
+            <span>{{  bid.amount }}</span> | <span>{{  bid.bidderAddress }}</span>
+          </div>
         </div>
-        
-      </div>
-    
-    <hr />
-      </div>
-        
+      
+        <hr />
+      </div> 
     </div>
 
   </body>
