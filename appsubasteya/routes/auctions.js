@@ -19,7 +19,7 @@ app.post('/start', async function (req, res) {
   } catch (err) {
     console.log('Auction Start ERROR -> ', err);
     output.success = false;
-    output.error = err;
+    output.error = err.message;
   }
   
   res.json(output);

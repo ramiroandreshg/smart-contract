@@ -1,29 +1,18 @@
 var myApp = angular.module('myApp', []);
 
-myApp.controller('auctionController', ['$scope', '$http',
-function($scope, $http) {
-  $scope.auctionAddress = '';
+myApp.controller('auctionController', ['$scope', '$http', '$log',
+function($scope, $http, $log) {
+  var utils = window.utils || {};
+
   $scope.deployed = false;
-  $scope.bestBid = 0;
+  $scope.auctionAddress = '';
+  $scope.auction = utils.initAuction();
   $scope.bids = [];
-  $scope.auction = {
-    basePrice: '',
-    description: '',
-    maxOffers: '',
-    maxPrice: '',
-    minPrice: '',
-    name: '',
-    ownerAddress: '',
-    publicInfo: 'show',
-    url: ''
-  }; 
-  $scope.bid = {
-    amount: '',
-    address: ''
-  };
+  $scope.bestBid = 0;
+  $scope.bid = utils.initBid();
   $scope.contractLoading = false;
   $scope.bidLoading = false;
-  $scope.elems = _gatherFormElements();
+  $scope.elems = utils.gatherFormElements();
 
   $scope.contract = function () {
     if (!validateAuction()) {
@@ -58,17 +47,17 @@ function($scope, $http) {
     $http.post('/auctions/bid', data, config)
     .then(function successCallback(response) {
       if(response.data.success){
-        console.log('bid Placed');
+        $log.info('bid Placed');
         $scope.bestBid = response.data.bidAmount;
         $scope.listBids();
-        _cleanUpForm('bid-form'); 
+        utils.cleanUpForm('bid-form'); 
       } else {
-        console.log('error placing bid', response.data.error);
+        $log.warn('placing bid', response.data.error);
         alert('Error placing bid');
-        _cleanUpForm('bid-form'); 
+        utils.cleanUpForm('bid-form'); 
       }
     }, function errorCallback(response) {
-      console.log('error callback placing bid', response);
+      $log.error('callback placing bid', response);
       alert('Error placing bid');
     }).finally(function () {
       $scope.bidLoading = false;
@@ -81,16 +70,14 @@ function($scope, $http) {
       url: '/auctions/bids'
     }).then(function successCallback(response) {
       if (response.data.error) {
-        console.log('error listing bids', response);
+        $log.warn('listing bids', response);
       } else {
         $scope.bids = response.data.bids;
       }
     }, function errorCallback(response) {
-      console.log('error callback listing bids', response);
+      $log.error('callback listing bids', response);
     });
   }
-
-  // $scope.listBids();
   
   var validateAuction = function() {
     var a = $scope.auction;
@@ -106,7 +93,7 @@ function($scope, $http) {
   }
 
   var startAuction = function () {
-    var data = _buildAuction($scope.elems);
+    var data = utils.buildAuction($scope.auction);
      
     var config = {
       headers : {
@@ -118,16 +105,16 @@ function($scope, $http) {
     $http.post('/auctions/start', data, config)
     .then(function successCallback(response) {
       if(response.data.success){
-        console.log('deploy successful');
+        $log.info('deploy successful');
         $scope.deployed = true;
         $scope.auctionAddress = response.data.auctionAddress;
-        _disableAndHideFields()   
+        utils.disableAndHideFields($scope.elems);   
       } else {
-        console.log('err', response);
+        $log.warn('deploying contract', response.data.error);
       alert('Error deploying contract');
       }
     }, function errorCallback(response) {
-      console.log('error callback deploying contract', response);
+      $log.error('callback deploying contract', response);
       alert('Error deploying contract');
     }).finally(function () {
       $scope.contractLoading = false;
@@ -151,83 +138,20 @@ function($scope, $http) {
     $http.post('/auctions/end', data, config)
     .then(function successCallback(response) {
       if (response.data.success) {
-        console.log('disabling contract success');
+        $log.info('disabling contract success');
         $scope.deployed = false;
         $scope.auctionAddress = '';
-        _cleanUpForm('auction-form');
+        utils.cleanUpForm('auction-form');
         alert('Contract disabled');
       } else {
-        console.log('error disabling contract', response.data.error);
+        $log.warn('disabling contract', response.data.error);
         alert('Cant cancel auction');
       }
     }, function errorCallback(response) {
-      console.log('error callback disabling contract', response);
+      $log.error('callback disabling contract', response);
       alert('Error disabling contract');
     }).finally(function () {
       $scope.contractLoading = false;
     });
   }  
 }]);
-
-function _buildAuction (elems) {
-  let auction = {
-    url: elems.url.value,
-    name: elems.name.value,
-    description: elems.description.value,
-    basePrice: elems.basePrice.value,
-    minPrice: elems.minPrice.value,
-    maxPrice: elems.maxPrice.value,
-    maxOffers: elems.maxOffers.value,
-    publicInfo: elems.publicInfo.value
-  }
-  if (elems.ownerAddress.value) {
-    auction.ownerAddress = elems.ownerAddress.value 
-  }
-
-  return JSON.stringify(auction);
-}
-
-function _disableAndHideFields () {
-  if (document.querySelector('input[name="public-info"]:checked').value === 'hide') {
-    document.getElementById('auction-min-price').value = "private";
-    document.getElementById('auction-max-price').value = "private";
-    document.getElementById('auction-max-offers').value = "private";
-  }
-  document.getElementById('auction-url').disabled = true;
-  document.getElementById('auction-name').disabled = true;
-  document.getElementById('auction-description').disabled = true;
-  document.getElementById('auction-base-price').disabled = true;
-  document.getElementById('auction-max-price').disabled = true;
-  document.getElementById('auction-min-price').disabled = true;
-  document.getElementById('auction-max-offers').disabled = true;
-
-  document.querySelectorAll('input[name="public-info"]').forEach(function (el, idx, list) {
-    el.disabled = true;
-  });
-
-  document.getElementById('auction-button').value = 'End Auction';
-  document.getElementById('auction-button').classList.toggle('end-auction');
-}
-
-function _cleanUpForm (selector) {
-  document.getElementById(selector).reset(); 
-}
-
-function _gatherFormElements () {
-  return {
-    url: document.getElementById('auction-url'),
-    name: document.getElementById('auction-name'),
-    description: document.getElementById('auction-description'),
-    basePrice: document.getElementById('auction-base-price'),
-    minPrice: document.getElementById('auction-min-price'),
-    maxPrice: document.getElementById('auction-max-price'),
-    maxOffers: document.getElementById('auction-max-offers'),
-    publicInfo: document.querySelector('input[name="public-info"]:checked'),
-    ownerAddress: document.getElementById('auction-owner-address'),
-    formBtn: document.getElementById('auction-button')
-  }
-}
-
-function _validateAuction (auction) {
-  return auction.url && auction.name && auction 
-}
