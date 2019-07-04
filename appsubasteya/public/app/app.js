@@ -10,13 +10,15 @@ function($scope, $log, $filter, $http) {
     minPrice: '',
     name: '',
     ownerAddress: '',
-    publicInfo: '',
+    publicInfo: 'show',
     url: ''
   }; 
   $scope.auctionAddress = '';
   $scope.deployed = false;
 
-  $scope.submit = function() {
+  $scope.elems = _gatherFormElements();
+
+  $scope.contract = function() {
     if (!validateAuction()) {
       alert('Incomplete Form');
       return;
@@ -28,6 +30,19 @@ function($scope, $log, $filter, $http) {
     }
   }
   
+  $scope.listBids = function () {
+    $http({
+      method: 'GET',
+      url: '/auctions/bids'
+    }).then(function successCallback(response) {
+        console.log('bids', response);
+      }, function errorCallback(response) {
+        console.log('err', response);
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
+  }
+  
   var validateAuction = function() {
     var a = $scope.auction;
     
@@ -35,9 +50,8 @@ function($scope, $log, $filter, $http) {
       a.maxPrice && a.minPrice && a.name && a.publicInfo && a.url;
   }
 
-
   var startAuction = function () {
-    var data = _buildAuction($scope.auction);
+    var data = _buildAuction($scope.elems);
      
     var config = {
       headers : {
@@ -58,26 +72,48 @@ function($scope, $log, $filter, $http) {
   }
 
   var endAuction = function () {
+    if (!$scope.auction.ownerAddress) {
+      alert('Owner Address required');
+      return;
+    }
+    var data = JSON.stringify({owner: $scope.auction.ownerAddress})
 
+    var config = {
+      headers : {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    $http.post('/auctions/end', data, config)
+    .then(function successCallback(response) {
+      $scope.deployed = false;
+      $scope.auctionAddress = '';
+      _cleanUpForm()
+    }, function errorCallback(response) {
+      console.log('err', response);
+      alert('Error disabling contract');
+    });
   }
+
+
   
 }]);
 
-function _buildAuction (a) {
+function _buildAuction (elems) {
   let auction = {
-    url: a.url,
-    name: a.name,
-    description: a.description,
-    basePrice: a.basePrice,
-    minPrice: a.minPrice,
-    maxPrice: a.maxPrice,
-    maxOffers: a.maxOffers,
-    publicInfo: a.publicInfo
+    url: elems.url.value,
+    name: elems.name.value,
+    description: elems.description.value,
+    basePrice: elems.basePrice.value,
+    minPrice: elems.minPrice.value,
+    maxPrice: elems.maxPrice.value,
+    maxOffers: elems.maxOffers.value,
+    publicInfo: elems.publicInfo.value
   }
-  if (a.ownerAddress) {
-    auction.ownerAddress = a.ownerAddress 
-  }    
-  
+  if (elems.ownerAddress.value) {
+    auction.ownerAddress = elems.ownerAddress.value 
+  }
+
   return JSON.stringify(auction);
 }
 
@@ -103,30 +139,29 @@ function _disableAndHideFields () {
   document.getElementById('auction-button').classList.toggle('end-auction');
 }
 
-myApp.controller('bidController', ['$scope', function($scope) {
-    
-    $scope.name = 'Second';
-    
-}]);
+function _cleanUpForm () {
+  document.getElementById("auction-form").reset(); 
+}
 
-myApp.controller('bidListController', ['$scope', function($scope) {
-    
-  $scope.name = 'Bid List';
-  
-  $scope.listBids = function () {
-    $http({
-      method: 'GET',
-      url: '/auctions/bids'
-    }).then(function successCallback(response) {
-        console.log('bids', response);
-      }, function errorCallback(response) {
-        console.log('err', response);
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-      });
+function _gatherFormElements () {
+  return {
+    url: document.getElementById('auction-url'),
+    name: document.getElementById('auction-name'),
+    description: document.getElementById('auction-description'),
+    basePrice: document.getElementById('auction-base-price'),
+    minPrice: document.getElementById('auction-min-price'),
+    maxPrice: document.getElementById('auction-max-price'),
+    maxOffers: document.getElementById('auction-max-offers'),
+    publicInfo: document.querySelector('input[name="public-info"]:checked'),
+    ownerAddress: document.getElementById('auction-owner-address'),
+    formBtn: document.getElementById('auction-button')
   }
+}  
 
-}]);
+
+ 
+
+
 
 function _validateAuction (auction) {
   return auction.url && auction.name && auction 
