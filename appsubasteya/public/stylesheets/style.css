@@ -112,3 +112,7 @@ a {
   background:linear-gradient(to bottom, #e23b3b 5%, #e23b3b 100%);
   background-color:#e23b3b;
 }
+
+.blur {
+  opacity: 0.5;
+}

@@ -21,6 +21,8 @@ function($scope, $http) {
     amount: '',
     address: ''
   };
+  $scope.contractLoading = false;
+  $scope.bidLoading = false;
   $scope.elems = _gatherFormElements();
 
   $scope.contract = function () {
@@ -52,6 +54,7 @@ function($scope, $http) {
       }
     }
 
+    $scope.bidLoading = true;
     $http.post('/auctions/bid', data, config)
     .then(function successCallback(response) {
       if(response.data.success){
@@ -67,6 +70,8 @@ function($scope, $http) {
     }, function errorCallback(response) {
       console.log('error callback placing bid', response);
       alert('Error placing bid');
+    }).finally(function () {
+      $scope.bidLoading = false;
     });
   }
   
@@ -85,7 +90,7 @@ function($scope, $http) {
     });
   }
 
-  $scope.listBids();
+  // $scope.listBids();
   
   var validateAuction = function() {
     var a = $scope.auction;
@@ -109,6 +114,7 @@ function($scope, $http) {
       }
     }
 
+    $scope.contractLoading = true;
     $http.post('/auctions/start', data, config)
     .then(function successCallback(response) {
       if(response.data.success){
@@ -123,6 +129,8 @@ function($scope, $http) {
     }, function errorCallback(response) {
       console.log('error callback deploying contract', response);
       alert('Error deploying contract');
+    }).finally(function () {
+      $scope.contractLoading = false;
     });
   }
 
@@ -139,6 +147,7 @@ function($scope, $http) {
       }
     }
 
+    $scope.contractLoading = true;
     $http.post('/auctions/end', data, config)
     .then(function successCallback(response) {
       console.log('disabling contract success');
@@ -149,6 +158,8 @@ function($scope, $http) {
     }, function errorCallback(response) {
       console.log('error callback disabling contract', response);
       alert('Error disabling contract');
+    }).finally(function () {
+      $scope.contractLoading = false;
     });
   }  
 }]);
