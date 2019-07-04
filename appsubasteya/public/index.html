@@ -16,10 +16,10 @@
     </style>
     
     <!-- load angular via CDN -->
-    <script src="//code.angularjs.org/1.3.0-rc.1/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
     <script src="app/app.js"></script>
-    <script src="app/javascripts/auction-cli.js"></script>
-    <script src="app/javascripts/bid-cli.js"></script>
+    <!--script src="app/javascripts/auction-cli.js"></script>
+    <script src="app/javascripts/bid-cli.js"></script-->
   </head>
   <body>
 
@@ -40,22 +40,23 @@
             <div class="auction">
               <h2>Auction Information</h2>
               <form id="auction-form">
-                <input type="text" id="auction-url" placeholder="URL">
-                <input type="text" id="auction-name" placeholder="Name">
-                <textarea type="text" id="auction-desc" placeholder="Description" onkeyup="js.auction.adjustTextarea(this)"></textarea>
-                <input type="text" id="auction-base-price" placeholder="Base Price">
-                <input type="text" id="auction-min-price" placeholder="Min. Price">
-                <input type="text" id="auction-max-price" placeholder="Max. Price">
-                <input type="text" id="auction-max-offers" placeholder="Max. offers">
-                <input type="text" id="auction-owner-address" placeholder="Owner Address">
+                <input type="text" id="auction-url" placeholder="URL" ng-model="auction.url">
+                <input type="text" id="auction-name" placeholder="Name" ng-model="auction.name">
+                <textarea type="text" id="auction-desc" placeholder="Description" ng-model="auction.description"></textarea>
+                <input type="text" id="auction-base-price" placeholder="Base Price" ng-model="auction.basePrice">
+                <input type="text" id="auction-min-price" placeholder="Min. Price" ng-model="auction.minPrice">
+                <input type="text" id="auction-max-price" placeholder="Max. Price" ng-model="auction.maxPrice">
+                <input type="text" id="auction-max-offers" placeholder="Max. offers" ng-model="auction.maxOffers">
+                <input type="text" id="auction-owner-address" placeholder="Owner Address" ng-model="auction.ownerAddress">
                 <label for="auction-show-info" id="show-info">
-                  <input type="radio" id="auction-show-info" name="public-info" value="show" checked> Show pricing information
+                  <input type="radio" id="auction-show-info" name="public-info" value="show" ng-model="auction.publicInfo"> Show pricing information
                 </label>
                 <label for="auction-hide-info" id="hide-info">
-                  <input type="radio" id="auction-hide-info" name="public-info" value="hide"> Hide pricing information
+                  <input type="radio" id="auction-hide-info" name="public-info" value="hide" ng-model="auction.publicInfo"> Hide pricing information
                 </label>
-                <input type="button" id="auction-button" value="Start Auction" data-action="start" onclick="js.auction.executeForm()"/>
+                <input type="button" id="auction-button" value="Start Auction" data-action="start" ng-click="submit()"/>
               </form>
+              <span ng-if="auctionAddress" style="font-style: italic; color: grey; font-size: small;">Contract Address: {{ auctionAddress }}</span>
             </div>
               
           <hr />

@@ -15,6 +15,7 @@ app.post('/start', async function (req, res) {
   try {
     deployedContractAddress = await i.deployContract(args);
     output.success = true; // should handle this with HTTP error codes 
+    output.auctionAddress = deployedContractAddress;
   } catch (err) {
     console.log('Auction Start ERROR -> ', err);
     output.success = false;
@@ -40,6 +41,7 @@ app.post('/end', async function (req, res) {
   res.json(output);
 });
 
+/*
 app.get('/bids', async function(req, res) {
   let output = {};
   try {
@@ -52,6 +54,7 @@ app.get('/bids', async function(req, res) {
   
   res.json(output);
 });
+*/
 
 app.get('/bid', function(req, res) {
   res.render('bid', { title: 'Bid Page'});
@@ -72,5 +75,30 @@ app.post('/bid', async function(req, res) {
   
   res.json(output);
 });
+
+////////////
+
+app.get('/bids', function(req, res) {
+  res.json([
+    {
+      address: 'addr1',
+      amount: 1
+    },
+    {
+      address: 'addr1',
+      amount: 1
+    },
+    {
+      address: 'addr2',
+      amount: 1
+    },
+    {
+      address: 'addr5',
+      amount: 1
+    },
+  ]);
+});
+
+
 
 module.exports = app;
