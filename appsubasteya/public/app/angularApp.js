@@ -1,7 +1,11 @@
 var myApp = angular.module('myApp', []);
 
-myApp.controller('auctionController', ['$scope', '$log', '$filter', '$http',
-function($scope, $log, $filter, $http) {
+myApp.controller('auctionController', ['$scope', '$http',
+function($scope, $http) {
+  $scope.auctionAddress = '';
+  $scope.deployed = false;
+  $scope.bestBid = 0;
+  $scope.bids = [];
   $scope.auction = {
     basePrice: '',
     description: '',
@@ -17,12 +21,6 @@ function($scope, $log, $filter, $http) {
     amount: '',
     address: ''
   };
-  $scope.auctionAddress = '';
-  $scope.deployed = false;
-  $scope.bestBid = 0;
-
-  $scope.bids = [];
-
   $scope.elems = _gatherFormElements();
 
   $scope.contract = function () {
@@ -63,14 +61,13 @@ function($scope, $log, $filter, $http) {
         _cleanUpForm('bid-form'); 
       } else {
         console.log('error placing bid', response);
-        _cleanUpForm('bid-form'); 
         alert('Error placing bid');
+        _cleanUpForm('bid-form'); 
       }
     }, function errorCallback(response) {
       console.log('error callback placing bid', response);
       alert('Error placing bid');
     });
-
   }
   
   $scope.listBids = function () {
@@ -78,14 +75,14 @@ function($scope, $log, $filter, $http) {
       method: 'GET',
       url: '/auctions/bids'
     }).then(function successCallback(response) {
-        if (response.data.error) {
-          console.log('error listing bids', response);
-        } else {
-          $scope.bids = response.data.bids;
-        }
-      }, function errorCallback(response) {
-        console.log('error callback listing bids', response);
-      });
+      if (response.data.error) {
+        console.log('error listing bids', response);
+      } else {
+        $scope.bids = response.data.bids;
+      }
+    }, function errorCallback(response) {
+      console.log('error callback listing bids', response);
+    });
   }
 
   $scope.listBids();
@@ -115,6 +112,7 @@ function($scope, $log, $filter, $http) {
     $http.post('/auctions/start', data, config)
     .then(function successCallback(response) {
       if(response.data.success){
+        console.log('deploy successful');
         $scope.deployed = true;
         $scope.auctionAddress = response.data.auctionAddress;
         _disableAndHideFields()   
@@ -126,7 +124,6 @@ function($scope, $log, $filter, $http) {
       console.log('error callback deploying contract', response);
       alert('Error deploying contract');
     });
-
   }
 
   var endAuction = function () {
@@ -144,6 +141,7 @@ function($scope, $log, $filter, $http) {
 
     $http.post('/auctions/end', data, config)
     .then(function successCallback(response) {
+      console.log('disabling contract success');
       $scope.deployed = false;
       $scope.auctionAddress = '';
       _cleanUpForm('auction-form');
@@ -152,8 +150,7 @@ function($scope, $log, $filter, $http) {
       console.log('error callback disabling contract', response);
       alert('Error disabling contract');
     });
-  }
-  
+  }  
 }]);
 
 function _buildAuction (elems) {
@@ -213,12 +210,7 @@ function _gatherFormElements () {
     ownerAddress: document.getElementById('auction-owner-address'),
     formBtn: document.getElementById('auction-button')
   }
-}  
-
-
- 
-
-
+}
 
 function _validateAuction (auction) {
   return auction.url && auction.name && auction 
