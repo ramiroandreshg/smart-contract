@@ -150,11 +150,16 @@ function($scope, $http) {
     $scope.contractLoading = true;
     $http.post('/auctions/end', data, config)
     .then(function successCallback(response) {
-      console.log('disabling contract success');
-      $scope.deployed = false;
-      $scope.auctionAddress = '';
-      _cleanUpForm('auction-form');
-      alert('Contract disabled');
+      if (response.data.success) {
+        console.log('disabling contract success');
+        $scope.deployed = false;
+        $scope.auctionAddress = '';
+        _cleanUpForm('auction-form');
+        alert('Contract disabled');
+      } else {
+        console.log('error disabling contract', response.data.error);
+        alert('Cant cancel auction');
+      }
     }, function errorCallback(response) {
       console.log('error callback disabling contract', response);
       alert('Error disabling contract');
