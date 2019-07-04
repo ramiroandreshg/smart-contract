@@ -1,0 +1,118 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.auction{
+  font-family: 'Open Sans Condensed', arial, sans;
+  width: 500px;
+  padding: 30px;
+  background: #FFFFFF;
+  margin: 50px auto;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+  -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow:  0px 0px 15px rgba(0, 0, 0, 0.22);
+
+}
+.auction h2{
+  background: #4D4D4D;
+  text-transform: uppercase;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: #797979;
+  font-size: 18px;
+  font-weight: 100;
+  padding: 20px;
+  margin: -30px -30px 30px -30px;
+}
+.auction input[type="text"],
+.auction input[type="date"],
+.auction input[type="datetime"],
+.auction input[type="email"],
+.auction input[type="number"],
+.auction input[type="search"],
+.auction input[type="time"],
+.auction input[type="url"],
+.auction input[type="password"],
+.auction textarea,
+.auction select 
+{
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  outline: none;
+  display: block;
+  width: 100%;
+  padding: 7px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  background: transparent;
+  margin-bottom: 10px;
+  font: 16px Arial, Helvetica, sans-serif;
+  height: 45px;
+}
+.auction textarea{
+  resize:none;
+  overflow: hidden;
+}
+.auction input[type="button"], 
+.auction input[type="submit"]{
+  -moz-box-shadow: inset 0px 1px 0px 0px #45D6D6;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #45D6D6;
+  box-shadow: inset 0px 1px 0px 0px #45D6D6;
+  background-color: #2CBBBB;
+  border: 1px solid #27A0A0;
+  display: inline-block;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 14px;
+  padding: 8px 18px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.auction input[type="button"]:hover, 
+.auction input[type="submit"]:hover {
+  background:linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
+  background-color:#34CACA;
+}
+
+.auction label {
+  margin: 10px 0px;
+  cursor: pointer;
+  font: 16px Arial, Helvetica, sans-serif;
+  color: #797979;
+}
+
+.auction label#show-info {
+  float: left;
+  width: 50%;
+}
+
+.auction label#hide-info {
+  float: right;
+  width: 50%;
+  text-align: right;
+}
+
+
+.auction input[type="button"].end-auction, 
+.auction input[type="submit"].end-auction {
+  box-shadow: inset 0px 1px 0px 0px #e23b3b;
+  background-color: #e23b3b;
+  border-color: #e23b3b;
+}
+
+.auction input[type="button"].end-auction:hover, 
+.auction input[type="submit"].end-auction:hover {
+  background:linear-gradient(to bottom, #e23b3b 5%, #e23b3b 100%);
+  background-color:#e23b3b;
+}
+
+.blur {
+  opacity: 0.5;
+}

@@ -1,0 +1,183 @@
+[
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "openAuction",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "bid",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "closeAuction",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "bidNumber",
+        "type": "uint256"
+      }
+    ],
+    "name": "getBid",
+    "outputs": [
+      {
+        "name": "bidder",
+        "type": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getBidsCount",
+    "outputs": [
+      {
+        "name": "bidsCount",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getCurrentMaxBid",
+    "outputs": [
+      {
+        "name": "bidder",
+        "type": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getAuctionInfo",
+    "outputs": [
+      {
+        "name": "itmUrl",
+        "type": "string"
+      },
+      {
+        "name": "itmName",
+        "type": "string"
+      },
+      {
+        "name": "itmDesc",
+        "type": "string"
+      },
+      {
+        "name": "itmBPrice",
+        "type": "uint256"
+      },
+      {
+        "name": "itmPmin",
+        "type": "int256"
+      },
+      {
+        "name": "itmPmax",
+        "type": "int256"
+      },
+      {
+        "name": "itmMaxOffers",
+        "type": "int256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "name": "itmUrl",
+        "type": "string"
+      },
+      {
+        "name": "itmName",
+        "type": "string"
+      },
+      {
+        "name": "itmDesc",
+        "type": "string"
+      },
+      {
+        "name": "itmBPrice",
+        "type": "uint256"
+      },
+      {
+        "name": "itmPmin",
+        "type": "uint256"
+      },
+      {
+        "name": "itmPmax",
+        "type": "uint256"
+      },
+      {
+        "name": "itmMaxOffers",
+        "type": "uint256"
+      },
+      {
+        "name": "hiddenPrices",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "fallback"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "bidder",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "placeBid",
+    "type": "event"
+  }
+]
