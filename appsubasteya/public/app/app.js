@@ -13,14 +13,19 @@ function($scope, $log, $filter, $http) {
     publicInfo: 'show',
     url: ''
   }; 
+  $scope.bid = {
+    amount: '',
+    address: ''
+  };
   $scope.auctionAddress = '';
   $scope.deployed = false;
+  $scope.bestBid = 0;
 
   $scope.elems = _gatherFormElements();
 
-  $scope.contract = function() {
+  $scope.contract = function () {
     if (!validateAuction()) {
-      alert('Incomplete Form');
+      alert('Incomplete Auction Form');
       return;
     }
     if (!$scope.deployed) {
@@ -28,6 +33,40 @@ function($scope, $log, $filter, $http) {
     } else {
       endAuction();
     }
+  }
+
+  $scope.placeBid = function () {
+    if (!validateBid()) {
+      alert('Incomplete Bid Form');
+      return;
+    }
+
+    var data = JSON.stringify({
+      amount: $scope.bid.amount,
+      address: $scope.bid.address
+    })
+
+    var config = {
+      headers : {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    $http.post('/auctions/bid', data, config)
+    .then(function successCallback(response) {
+      if(response.data.success){
+        console.log('bid Placed');
+        $scope.bestBid = response.data.bidAmount;
+        _cleanUpForm('bid-form'); 
+      } else {
+        console.log('err', response);
+      alert('Error deploying contract');
+      }
+    }, function errorCallback(response) {
+      console.log('err', response);
+      alert('Error disabling contract');
+    });
+
   }
   
   $scope.listBids = function () {
@@ -50,6 +89,12 @@ function($scope, $log, $filter, $http) {
       a.maxPrice && a.minPrice && a.name && a.publicInfo && a.url;
   }
 
+  var validateBid = function () {
+    var b = $scope.bid;
+
+    return b.amount && b.address;
+  }
+
   var startAuction = function () {
     var data = _buildAuction($scope.elems);
      
@@ -61,9 +106,14 @@ function($scope, $log, $filter, $http) {
 
     $http.post('/auctions/start', data, config)
     .then(function successCallback(response) {
-      $scope.deployed = true;
-      $scope.auctionAddress = response.data.auctionAddress;
-      _disableAndHideFields()
+      if(response.data.success){
+        $scope.deployed = true;
+        $scope.auctionAddress = response.data.auctionAddress;
+        _disableAndHideFields()   
+      } else {
+        console.log('err', response);
+      alert('Error deploying contract');
+      }
     }, function errorCallback(response) {
       console.log('err', response);
       alert('Error deploying contract');
@@ -88,14 +138,12 @@ function($scope, $log, $filter, $http) {
     .then(function successCallback(response) {
       $scope.deployed = false;
       $scope.auctionAddress = '';
-      _cleanUpForm()
+      _cleanUpForm('auction-form');
     }, function errorCallback(response) {
       console.log('err', response);
       alert('Error disabling contract');
     });
   }
-
-
   
 }]);
 
@@ -139,8 +187,8 @@ function _disableAndHideFields () {
   document.getElementById('auction-button').classList.toggle('end-auction');
 }
 
-function _cleanUpForm () {
-  document.getElementById("auction-form").reset(); 
+function _cleanUpForm (selector) {
+  document.getElementById(selector).reset(); 
 }
 
 function _gatherFormElements () {

@@ -67,6 +67,7 @@ app.post('/bid', async function(req, res) {
   try {
     await i.placeBid(deployedContractAddress, args);
     output.success = true;
+    output.bidAmount = args.amount;
   } catch (err) {
     console.log('Place Bid ERROR -> ', err.message);
     output.success = false;
