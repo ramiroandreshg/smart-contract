@@ -63,7 +63,7 @@ function($scope, $http) {
         $scope.listBids();
         _cleanUpForm('bid-form'); 
       } else {
-        console.log('error placing bid', response);
+        console.log('error placing bid', response.data.error);
         alert('Error placing bid');
         _cleanUpForm('bid-form'); 
       }
