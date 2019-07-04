@@ -59,7 +59,7 @@ function($scope, $log, $filter, $http) {
       if(response.data.success){
         console.log('bid Placed');
         $scope.bestBid = response.data.bidAmount;
-        $scope.bids = $scope.listBids();
+        $scope.listBids();
         _cleanUpForm('bid-form'); 
       } else {
         console.log('err', response);
@@ -88,7 +88,7 @@ function($scope, $log, $filter, $http) {
       });
   }
 
-  $scope.bids = $scope.listBids();
+  $scope.listBids();
   
   var validateAuction = function() {
     var a = $scope.auction;
@@ -147,6 +147,7 @@ function($scope, $log, $filter, $http) {
       $scope.deployed = false;
       $scope.auctionAddress = '';
       _cleanUpForm('auction-form');
+      alert('Contract disabled');
     }, function errorCallback(response) {
       console.log('err', response);
       alert('Error disabling contract');
