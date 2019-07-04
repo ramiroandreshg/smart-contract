@@ -108,7 +108,7 @@ contract Subasteya {
     }
   }
 
-  function getBid (uint256 bidNumber) external onlyOpen view returns(address bidder, uint256 amount) {
+  function getBid (uint256 bidNumber) external view returns(address bidder, uint256 amount) {
     require(bidNumber <= getBidsCount(), "The bid requested does not exist yet");
     
     return (bids[bidNumber - 1].bidder, bids[bidNumber - 1].amount);
@@ -176,7 +176,7 @@ contract Subasteya {
   }
 
   /*  GETTERS */
-  function getBidsCount () public onlyOpen view returns(uint256 bidsCount) {
+  function getBidsCount () public view returns(uint256 bidsCount) {
     return bids.length;
   }
 
