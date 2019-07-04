@@ -21,6 +21,8 @@ function($scope, $log, $filter, $http) {
   $scope.deployed = false;
   $scope.bestBid = 0;
 
+  $scope.bids = [];
+
   $scope.elems = _gatherFormElements();
 
   $scope.contract = function () {
@@ -57,14 +59,16 @@ function($scope, $log, $filter, $http) {
       if(response.data.success){
         console.log('bid Placed');
         $scope.bestBid = response.data.bidAmount;
+        $scope.bids = $scope.listBids();
         _cleanUpForm('bid-form'); 
       } else {
         console.log('err', response);
-      alert('Error deploying contract');
+        _cleanUpForm('bid-form'); 
+        alert('Error placing bid');
       }
     }, function errorCallback(response) {
       console.log('err', response);
-      alert('Error disabling contract');
+      alert('Error placing bid');
     });
 
   }
@@ -74,13 +78,17 @@ function($scope, $log, $filter, $http) {
       method: 'GET',
       url: '/auctions/bids'
     }).then(function successCallback(response) {
-        console.log('bids', response);
+        if (response.data.error) {
+          console.log('err', response);
+        } else {
+          $scope.bids = response.data.bids;
+        }
       }, function errorCallback(response) {
         console.log('err', response);
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
       });
   }
+
+  $scope.bids = $scope.listBids();
   
   var validateAuction = function() {
     var a = $scope.auction;
