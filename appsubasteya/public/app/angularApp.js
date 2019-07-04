@@ -62,12 +62,12 @@ function($scope, $log, $filter, $http) {
         $scope.listBids();
         _cleanUpForm('bid-form'); 
       } else {
-        console.log('err', response);
+        console.log('error placing bid', response);
         _cleanUpForm('bid-form'); 
         alert('Error placing bid');
       }
     }, function errorCallback(response) {
-      console.log('err', response);
+      console.log('error callback placing bid', response);
       alert('Error placing bid');
     });
 
@@ -79,12 +79,12 @@ function($scope, $log, $filter, $http) {
       url: '/auctions/bids'
     }).then(function successCallback(response) {
         if (response.data.error) {
-          console.log('err', response);
+          console.log('error listing bids', response);
         } else {
           $scope.bids = response.data.bids;
         }
       }, function errorCallback(response) {
-        console.log('err', response);
+        console.log('error callback listing bids', response);
       });
   }
 
@@ -123,7 +123,7 @@ function($scope, $log, $filter, $http) {
       alert('Error deploying contract');
       }
     }, function errorCallback(response) {
-      console.log('err', response);
+      console.log('error callback deploying contract', response);
       alert('Error deploying contract');
     });
 
@@ -149,7 +149,7 @@ function($scope, $log, $filter, $http) {
       _cleanUpForm('auction-form');
       alert('Contract disabled');
     }, function errorCallback(response) {
-      console.log('err', response);
+      console.log('error callback disabling contract', response);
       alert('Error disabling contract');
     });
   }
