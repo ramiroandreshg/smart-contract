@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "startApi": "node ./api/bin/www",
-    "startApp": "cd app; python -m SimpleHTTPServer 8000",
+    "startApp": "cd spa; python -m SimpleHTTPServer 8000",
     "compile": "node ./api/tools/compile.js"
   },
   "dependencies": {
