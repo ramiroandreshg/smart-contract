@@ -4,26 +4,29 @@ const i = require('./../tools/internals');
 const app = express.Router();
 const currentContracts = [];
 
-app.get('/', function(req, res) {
-  try {
-    i.createAuctionAndDeployContract('args');
-  } catch (e) {
-    console.log('ERRORRRR', e.message);
-  }
-  res.json(currentContracts);
-});
+app.get('/', async function(req, res) {
+  // res.json(currentContracts);
 
-app.post('/', async function(req, res) {
+
   const args = req.body;
-
+  
   try {
     auction = await i.createAuctionAndDeployContract(args);
   } catch (err) {
-    // handle it
+    // perhaps logging it could be handy
+    return res.status(err.httpCode).json(err);
   }
 
   return res.json({'out': 'put'});
 
 });
+
+/*
+ToDo: 
+app.post('/', async function(req, res) {
+
+});
+
+*/
 
 module.exports = app;
