@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+    <div class="panel panel-default ">
+      <div class="panel-heading">
+        <h3 class="panel-title">Auction Information</h3>
+      </div>
+      <div class="panel-body">
+        
+        <form ng-submit="ctrl.submit()">
+          <div class="form-group">
+            <label for="auction-url">URL</label>
+            <input type="text" class="form-control" id="auction-url" placeholder="URL" ng-model="ctrl.auction.url">
+          </div>
+          <div class="form-group">
+            <label for="auction-name">Name</label>
+            <input type="text" class="form-control" id="auction-name" placeholder="Name" ng-model="ctrl.auction.name">
+          </div>
+          <div class="form-group">
+            <label for="auction-description">Description</label>
+            <textarea class="form-control" id="auction-name" rows="2" placeholder="Description" ng-model="ctrl.auction.description"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="auction-base-price">Base price</label>
+            <input type="text" class="form-control" id="auction-base-price" placeholder="Base price" ng-model="ctrl.auction.basePrice">
+          </div>
+          <div class="form-group">
+            <label for="auction-min-price">Min. price</label>
+            <input type="text" class="form-control" id="auction-min-price" placeholder="Min. price" ng-model="ctrl.auction.minPrice">
+          </div>
+          <div class="form-group">
+            <label for="auction-max-price">Max. price</label>
+            <input type="text" class="form-control" id="auction-max-price" placeholder="Max. price" ng-model="ctrl.auction.maxPrice">
+          </div>
+          <div class="form-group">
+            <label for="auction-max-offers">Max. offers</label>
+            <input type="text" class="form-control" id="auction-max-offers" placeholder="Max. offers" ng-model="ctrl.auction.maxOffers">
+          </div>
+          <div class="form-group">
+            <label for="auction-owner-address">Owner address</label>
+            <input type="text" class="form-control" id="auction-owner-address" placeholder="Owner address" ng-model="ctrl.auction.ownerAddress">
+          </div>
+          <div class="radio">
+            <label class="radio-inline">
+              <input type="radio" name="auction-show-prices" value="show" checked ng-model="ctrl.auction.showPrices">Show pricing information
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="auction-show-prices" value="hide" ng-model="ctrl.auction.showPrices">Hide pricing information
+            </label>    
+          </div>          
+          <button type="submit" class="btn btn-primary">Start Auction</button>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
