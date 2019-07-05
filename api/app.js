@@ -9,9 +9,12 @@ const auctionsRouter = require('./routes/auctions');
 
 var app = express();
 
+/* ToDo: remove it or uncomment it
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+*/
 
 app.use(logger('dev'));
 app.use(cookieParser());
