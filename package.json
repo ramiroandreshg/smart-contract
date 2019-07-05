@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "compile": "node ./tools/compile.js"
+    "startApi": "node ./api/bin/www",
+    "startFront": "cd app; python -m SimpleHTTPServer 8000",
+    "compile": "node ./api/tools/compile.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

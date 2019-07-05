@@ -89,12 +89,3 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
-(async () => {
-
-  // Opens the URL in the default browser
-  //await open('http://127.0.0.1:3000/auctions/new');
-  await open('http://127.0.0.1:3000/index.html');
-
-
-})();
