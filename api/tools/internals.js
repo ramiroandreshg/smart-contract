@@ -46,8 +46,11 @@ exports.createAuction = async function (auctionInfo) {
 
 exports.deleteAuction = async function (auctionId) {
   // find auction address (contract address)
+  const contractAddress = _findContractAddress(auctionId);
   // ask smc to disable contract (awaits)
+  await disableSmartContract(contractAddress)
   // remove auction from db (whatever method is used)
+  _deleteAuction(auctionId);
 }
 
 function _buildAuction (auctionInfo) {
@@ -73,4 +76,12 @@ function _validateAuction (auctionInfo) {
 
 function _saveAuction (auction) {
   // save the new auction into some json or db
+}
+
+function _deleteAuction (auctionId) {
+  // save the new auction into some json or db
+}
+
+function _findContractAddress (auctionId) {
+  return '0x0';
 }
