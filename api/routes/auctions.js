@@ -43,10 +43,13 @@ app.put('/:auctionId', function (req, res) {
   });
 });
 
-app.delete('/:auctionId', function (req, res) {
+app.delete('/:auctionId', async function (req, res) {
   return res.status(500).json({
     error: 'To do'
   });
+
+  const auctionId = req.params.auctionId;
+  await i.deleteAuction(auctionId);
 }); 
 
 module.exports = app;

@@ -44,6 +44,12 @@ exports.createAuction = async function (auctionInfo) {
   return auction;
 }
 
+exports.deleteAuction = async function (auctionId) {
+  // find auction address (contract address)
+  // ask smc to disable contract (awaits)
+  // remove auction from db (whatever method is used)
+}
+
 function _buildAuction (auctionInfo) {
   _validateAuction(auctionInfo);
   // We could parse auctionInfo as an auction object (ES6 class)
