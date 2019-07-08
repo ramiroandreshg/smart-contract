@@ -9,24 +9,34 @@ app.get('/', async function(req, res) {
     const auctions = i.getAllAuctions();
     return res.status(200).json(auctions);
   } catch (err) {
-    log.error('getAllAuctions', err.message);
-    return res.status(err.httpCode).json(err);
+    log.error('getAllAuctions', err.internalMsg);
+    return res.status(err.httpCode).json(err.getMessage());
   }
 });
 
 app.get('/:auctionId', function (req, res) {
-
+  try {
+    const auctionId = req.params.auctionId;
+    const auction = i.getAuction(auctionId);
+    return res.status(200).json(auction);
+  } catch (err) {
+    log.error('getAuction', err.internalMsg);
+    return res.status(err.httpCode).json(err.getMessage());
+  }
 });
 
 app.post('/', async function(req, res) {
   try {
-    auction = await i.createAuction(args);
+    const args = req.body;
+    console.log('args', args);
+    const auction = await i.createAuction(args);
+    return res.status(200).json(auction);
   } catch (err) {
-
-    return res.status(err.httpCode).json(err);
+    const out = i.buildErrorOutput(err);
+    log.error('createAuction:', out.internalMsg);
+    return res.status(out.code).json(out.msg);
+  
   }
-
-  return res.json({'out': 'put'});
 });
 
 app.put('/:auctionId', function (req, res) {
