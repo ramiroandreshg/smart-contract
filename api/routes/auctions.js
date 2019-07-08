@@ -9,7 +9,7 @@ app.get('/', async function(req, res) {
     const auctions = i.getAllAuctions();
     return res.status(200).json(auctions);
   } catch (err) {
-    log.error('getAllAuctions', err.internalMsg);
+    log.error('getAllAuctions:', err.internalMsg);
     return res.status(err.httpCode).json(err.getMessage());
   }
 });
@@ -20,7 +20,7 @@ app.get('/:auctionId', function (req, res) {
     const auction = i.getAuction(auctionId);
     return res.status(200).json(auction);
   } catch (err) {
-    log.error('getAuction', err.internalMsg);
+    log.error('getAuction:', err.internalMsg);
     return res.status(err.httpCode).json(err.getMessage());
   }
 });
@@ -34,16 +34,19 @@ app.post('/', async function(req, res) {
   } catch (err) {
     log.error('createAuction:', err.internalMsg);
     return res.status(err.httpCode).json(err.getMessage());
-  
   }
 });
 
 app.put('/:auctionId', function (req, res) {
-
+  return res.status(403).json({
+    error: 'Update action not available'
+  });
 });
 
 app.delete('/:auctionId', function (req, res) {
-
+  return res.status(500).json({
+    error: 'To do'
+  });
 }); 
 
 module.exports = app;
