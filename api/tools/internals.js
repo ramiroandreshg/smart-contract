@@ -3,14 +3,6 @@ const smc = require('./smart-contract');
 
 exports = module.exports = {};
 
-exports.buildErrorOutput = function (error) {
-  return {
-    code: (error instanceof AppError) ? error.httpCode : 500,
-    msg: (error instanceof AppError) ? error.getMessage() : error.message,
-    internalMsg: (error instanceof AppError) ? error.internalMsg : error.message,
-  }
-}
-
 exports.getAllAuctions = function () {  
   // ToDo
   return [

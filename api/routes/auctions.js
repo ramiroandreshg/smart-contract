@@ -32,9 +32,8 @@ app.post('/', async function(req, res) {
     const auction = await i.createAuction(args);
     return res.status(200).json(auction);
   } catch (err) {
-    const out = i.buildErrorOutput(err);
-    log.error('createAuction:', out.internalMsg);
-    return res.status(out.code).json(out.msg);
+    log.error('createAuction:', err.internalMsg);
+    return res.status(err.httpCode).json(err.getMessage());
   
   }
 });
